@@ -147,8 +147,11 @@ class Modules:
         Chat with others
         '''
         if self.chat_stats:  # Chat mode is on:
-            chat_res = chat.get_response(msg)  # Get response form chatterbot
-            self.send(group_id, chat_res)  # Send response
+            if msg == '/chat-on':  # Do now respond to '/chat-on'
+                pass
+            else:
+                chat_res = chat.get_response(msg)  # Get response form chatterbot
+                self.send(group_id, chat_res)  # Send response
         else:  # Chat mode is off:
             pass
     
@@ -170,33 +173,38 @@ class Modules:
         Economy system in chat.
         '''
         def get_current(self, uid):
-            uid = str(uid)
+            '''
+            Get the current economy status of someone.
+            '''
+            uid = str(uid)  # Convert UID from int to str
 
-            with open('economy.json', 'r') as f:
+            with open('economy.json', 'r') as f:  # Open storage file and load the data
                 economy_stats = json.load(f)
                 f.close()
 
-            coins = economy_stats["users"][uid]["c"]
+            coins = economy_stats["users"][uid]["c"]  # Get the coins this user have
 
-            modules.send(group_id, f"Your current economy status:\nCoins: {coins}")
+            modules.send(group_id, f"Your current economy status:\nCoins: {coins}")  # Send the results
 
         def work(self, uid):
-            uid = str(uid)
+            '''
+            Earn coins!
+            '''
+            uid = str(uid)  # Convert UID from int to str
 
-            income = random.randint(-500, 1000)
+            income = random.randint(-500, 1000)  # Random income
 
-            with open('economy.json', 'r') as f:
+            with open('economy.json', 'r') as f:  # Open storage file and load the data
                 economy_stats = json.load(f)
                 f.close()
 
-            economy_stats["users"][uid]["c"] += income
-            print(economy_stats)
+            economy_stats["users"][uid]["c"] += income  # Change current status
 
-            with open('economy.json', 'w') as f:
+            with open('economy.json', 'w') as f:  # Save the current status
                 json.dump(f, economy_stats)
                 f.close()
 
-            modules.send(group_id, f"You got ${income}.")
+            modules.send(group_id, f"You got ${income}.")  # How much did you earn?
 
     def help_(self):
         '''
@@ -255,12 +263,12 @@ def main(msg, uid):
         timed.tech_no()
 
     # Economy
-    elif msg == '^bal':
+    elif msg == '^bal':  # Current status
         economy.get_current(uid)
-    elif msg == '^work':
+    elif msg == '^work':  # Get money
         economy.work(uid)
 
-    # Help
+    # Send help
     elif msg == '/help':
         modules.help_()
 
