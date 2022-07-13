@@ -165,6 +165,21 @@ class Modules:
             '''
             if self.localtime[4:10] == 'Jul  1':
                 modules.send(group_id, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
+    
+    class Economy:
+        '''
+        Economy system in chat.
+        '''
+        def get_current(uid):
+            uid = int(uid)
+
+            with open('economy.json', 'r') as f:
+                economy_stats = json.load(f)
+                f.close()
+
+            coins = economy_stats["users"][uid]["c"]
+
+            modules.send(group_id, f"Your current economy status:\nCoins: {coins}")
 
     def help_(self):
         '''
@@ -173,7 +188,7 @@ class Modules:
         self.send(group_id, "Keywords:\n\ntb: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\nChat mode: Used to chat with the bot (BETA). While in this mode, every message will be given to the bot and the bot will give a response\nUsage:\n/chat-on: Turn the mode on.\n/chat-off: Turn the mode off.\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
-def main(msg, uid=None):
+def main(msg, uid):
     '''
     Get the keyword of a sentence, then send a proper request.
     '''
@@ -222,6 +237,10 @@ def main(msg, uid=None):
     elif 'technoblade' in msg or 'techno' in msg:
         timed.tech_no()
 
+    # Economy
+    elif msg == '^bal':
+        economy.get_current(uid)
+
     # Help
     elif msg == '/help':
         modules.help_()
@@ -244,8 +263,10 @@ def get_data():
 
 # Run the script
 if __name__ == '__main__':
+    # Initialize the modules
     modules = Modules()
     timed = Modules.Timed()
+    economy = Modules.Economy()
     modules.send(group_id, "Bot++ now ONLINE!")  # Inform others that the bot is online
 
     try:
