@@ -7,6 +7,7 @@ import requests  # For sending requests to the bot
 import json  # For managing Minecraft server query response
 import os  # Used to handle files
 import time  # Used for timed keywords and others
+import random  # For the economy module
 import argparse  # Used to get arguments
 from chatterbot import ChatBot  # Used for chat
 from chatterbot.trainers import ListTrainer, ChatterBotCorpusTrainer  # Training the chatbot
@@ -164,6 +165,38 @@ class Modules:
             '''
             if self.localtime[4:10] == 'Jul  1':
                 modules.send(group_id, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
+    class Economy:
+        '''
+        Economy system in chat.
+        '''
+        def get_current(self, uid):
+            uid = str(uid)
+
+            with open('economy.json', 'r') as f:
+                economy_stats = json.load(f)
+                f.close()
+
+            coins = economy_stats["users"][uid]["c"]
+
+            modules.send(group_id, f"Your current economy status:\nCoins: {coins}")
+
+        def work(self, uid):
+            uid = str(uid)
+
+            income = random.randint(-500, 1000)
+
+            with open('economy.json', 'r') as f:
+                economy_stats = json.load(f)
+                f.close()
+
+            economy_stats["users"][uid]["c"] += income
+            print(economy_stats)
+
+            with open('economy.json', 'w') as f:
+                json.dump(f, economy_stats)
+                f.close()
+
+            modules.send(group_id, f"You got ${income}.")
 
     def help_(self):
         '''
@@ -221,6 +254,12 @@ def main(msg, uid):
     elif 'technoblade' in msg or 'techno' in msg:
         timed.tech_no()
 
+    # Economy
+    elif msg == '^bal':
+        economy.get_current(uid)
+    elif msg == '^work':
+        economy.work(uid)
+
     # Help
     elif msg == '/help':
         modules.help_()
@@ -246,6 +285,7 @@ if __name__ == '__main__':
     # Initialize the modules
     modules = Modules()
     timed = Modules.Timed()
+    economy = Modules.Economy()
     modules.send(group_id, "Bot-PP now ONLINE!")  # Inform others that the bot is online
 
     app.run(host='127.0.0.1', port=9000)
