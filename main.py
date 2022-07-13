@@ -8,7 +8,6 @@ import json  # For managing Minecraft server query response
 import os  # Used to handle files
 import time  # Used for timed keywords and others
 import argparse  # Used to get arguments
-import sys  # Used for exiting the program
 from chatterbot import ChatBot  # Used for chat
 from chatterbot.trainers import ListTrainer, ChatterBotCorpusTrainer  # Training the chatbot
 
@@ -87,9 +86,9 @@ class Modules:
             max_players = mc_data['players']['max']
             self.send(group_id, f"Status: {online}\nMOTD: {motd}\nOnline players: {online_players}\nMax players: {max_players}")  # Send results
 
-            # Clear the cache data
-            os.system('rm -rf cache/mcq.json')
-            os.system('touch cache/mcq.json')
+            # Flush query data
+            os.system('rm -rf mcq.json')
+            os.system('touch mcq.json')
 
     def random_sexy(self, uid):
         '''
@@ -165,21 +164,6 @@ class Modules:
             '''
             if self.localtime[4:10] == 'Jul  1':
                 modules.send(group_id, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
-    
-    class Economy:
-        '''
-        Economy system in chat.
-        '''
-        def get_current(uid):
-            uid = int(uid)
-
-            with open('economy.json', 'r') as f:
-                economy_stats = json.load(f)
-                f.close()
-
-            coins = economy_stats["users"][uid]["c"]
-
-            modules.send(group_id, f"Your current economy status:\nCoins: {coins}")
 
     def help_(self):
         '''
@@ -237,10 +221,6 @@ def main(msg, uid):
     elif 'technoblade' in msg or 'techno' in msg:
         timed.tech_no()
 
-    # Economy
-    elif msg == '^bal':
-        economy.get_current(uid)
-
     # Help
     elif msg == '/help':
         modules.help_()
@@ -250,7 +230,7 @@ def main(msg, uid):
 
 
 @app.route('/', methods=["POST"])
-def get_data():
+def server():
     '''
     Get data of a received message.
     '''
@@ -266,11 +246,6 @@ if __name__ == '__main__':
     # Initialize the modules
     modules = Modules()
     timed = Modules.Timed()
-    economy = Modules.Economy()
-    modules.send(group_id, "Bot++ now ONLINE!")  # Inform others that the bot is online
+    modules.send(group_id, "Bot-PP now ONLINE!")  # Inform others that the bot is online
 
-    try:
-        app.run(host='127.0.0.1', port=9000)
-    except KeyboardInterrupt:
-        modules.send(group_id, "Bot++ now OFFLINE!")  # Inform others that the bot is now closed
-        sys.exit()
+    app.run(host='127.0.0.1', port=9000)
