@@ -178,11 +178,13 @@ class Modules:
             '''
             uid = str(uid)  # Convert UID from int to str
 
-            with open('economy.json', 'r') as f:  # Open storage file and load the data
-                economy_stats = json.load(f)
-                f.close()
-
-            coins = economy_stats["users"][uid]["c"]  # Get the coins this user have
+            try:
+                with open(f'economy/{uid}/coins.txt', 'r') as f:  # Open storage file and load the data
+                    coins = f.readline()  # Get the coins this user have
+                    f.close()
+            except FileNotFoundError:
+                os.system(f'touch economy/{uid}/coins.txt')
+                modules.send(group_id, 'Please use the command again!')
 
             modules.send(group_id, f"Your current economy status:\nCoins: {coins}")  # Send the results
 
@@ -194,14 +196,25 @@ class Modules:
 
             income = random.randint(-500, 1000)  # Random income
 
-            with open('economy.json', 'r') as f:  # Open storage file and load the data
-                economy_stats = json.load(f)
-                f.close()
+            try:
+                with open(f'economy/{uid}/coins.txt', 'r') as f:  # Open storage file and load the data
+                    coins = f.readline()
+                    f.close()
+            except FileNotFoundError:
+                os.system(f'touch economy/{uid}/coins.txt')
+                modules.send('Please use the command again!')
 
-            economy_stats["users"][uid]["c"] += income  # Change current status
+            coins = int(coins)
+            coins += income  # Change current status
 
-            with open('economy.json', 'w') as f:  # Save the current status
-                json.dump(f, economy_stats)
+            # Flush status
+            os.system(f'rm -rf economy/{uid}/coins.txt')
+            os.system(f'touch economy/{uid}/coins.txt')
+
+            coins = str(coins)
+
+            with open(f'economy/{uid}/coins.txt', 'w') as f:  # Save the current status
+                f.write(coins)
                 f.close()
 
             modules.send(group_id, f"You got ${income}.")  # How much did you earn?
@@ -263,6 +276,7 @@ def main(msg, uid):
         timed.tech_no()
 
     # Economy
+    # Command inspired from Discord bot: UnbelievaBoat
     elif msg == '^bal':  # Current status
         economy.get_current(uid)
     elif msg == '^work':  # Get money

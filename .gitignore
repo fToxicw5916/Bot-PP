@@ -7,3 +7,4 @@ session.token
 db.sqlite3
 sentence_tokenizer.pickle
 .DS_Store
+economy/*
