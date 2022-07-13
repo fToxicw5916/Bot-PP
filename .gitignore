@@ -1,0 +1,8 @@
+go-cqhttp
+config.yml
+data/
+device.json
+logs/
+session.token
+db.sqlite3
+sentence_tokenizer.pickle
