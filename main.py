@@ -14,6 +14,7 @@ from chatterbot.trainers import ListTrainer, ChatterBotCorpusTrainer  # Training
 
 app = Flask(__name__)  # Create the Flask APP
 parser = argparse.ArgumentParser(description="Bot++ manual")  # Create the parser
+
 chat = ChatBot("Toxic-Bot")  # Create the chatbot
 trainer = ListTrainer(chat)  # Create the list trainer for the chatbot
 corpus_trainer = ChatterBotCorpusTrainer(chat)  # Create the corpus trainer for the chatbot
@@ -182,7 +183,8 @@ class Modules:
                 with open(f'economy/{uid}/coins.txt', 'r') as f:  # Open storage file and load the data
                     coins = f.readline()  # Get the coins this user have
                     f.close()
-            except FileNotFoundError:
+            except FileNotFoundError:  # No data file?
+                os.system(f'touch economy/{uid}')
                 os.system(f'touch economy/{uid}/coins.txt')
                 modules.send(group_id, 'Please use the command again!')
 
@@ -200,35 +202,41 @@ class Modules:
                 with open(f'economy/{uid}/coins.txt', 'r') as f:  # Open storage file and load the data
                     coins = f.readline()
                     f.close()
-            except FileNotFoundError:
+            except FileNotFoundError:  # No data file?
+                os.system(f'touch economy/{uid}')
                 os.system(f'touch economy/{uid}/coins.txt')
                 modules.send('Please use the command again!')
 
-            coins = int(coins)
+            coins = int(coins)  # Convert coins to int so that we can add the income
             coins += income  # Change current status
 
             # Flush status
             os.system(f'rm -rf economy/{uid}/coins.txt')
             os.system(f'touch economy/{uid}/coins.txt')
 
-            coins = str(coins)
+            coins = str(coins)  # Change to str so that we can write it into the data file
 
             with open(f'economy/{uid}/coins.txt', 'w') as f:  # Save the current status
                 f.write(coins)
                 f.close()
 
-            modules.send(group_id, f"You got ${income}.")  # How much did you earn?
+            if income > 0:  # You got some money!
+                modules.send(group_id, f"You got ${income}.")  # How much did you earn?
+            elif income < 0:  # Too bad!
+                modules.send(group_id, f"You lost ${income}.")
+            elif income == 0:
+                modules.send(group_id, 'Nothing happened...')
 
     def help_(self):
         '''
         Send a help message.
         '''
-        self.send(group_id, "Keywords:\n\ntb: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\nChat mode: Used to chat with the bot (BETA). While in this mode, every message will be given to the bot and the bot will give a response\nUsage:\n/chat-on: Turn the mode on.\n/chat-off: Turn the mode off.\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send(group_id, "Keywords:\n\ntb: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nChat mode: Used to chat with the bot (BETA). While in this mode, every message will be given to the bot and the bot will give a response\nUsage:\n/chat-on: Turn the mode on.\n/chat-off: Turn the mode off.\n\nEconomy: No real use (for now)\nUsage:\n^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 def main(msg, uid):
     '''
-    Get the keyword of a sentence, then send a proper request.
+    Get the keyword of a sentence, then send a proper request to the server.
     '''
     msg = msg.lower()
 
