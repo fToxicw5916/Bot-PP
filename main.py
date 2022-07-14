@@ -45,6 +45,12 @@ class Modules:
         Sends a message to someone.
         '''
         requests.get(f"http://127.0.0.1:5700/send_private_msg?user_id={str(user_id)}&message={msg}")  # Do the request to send the message
+    
+    def mute(self, user_id, duration):
+        '''
+        Mute someone.
+        '''
+        requests.get(f'http://127.0.0.1:5700/set_group_ban?group_id={group_id}&user_id={user_id}&duration={duration}')  # Do the request to mute someone
 
     def calc(self, msg):
         '''
@@ -74,11 +80,11 @@ class Modules:
             except Exception:  # The query server is offline
                 modules.send(group_id, "Query server is offline! Please notify admin!")
             # Write data into a json file to convert plain text to JSON data
-            with open('cache/mcq.json', 'w') as f:
+            with open('storage/mcq.json', 'w') as f:
                 f.write(query_response.text)  # Store plain text
                 f.close()
 
-            with open('cache/mcq.json', 'r') as f:
+            with open('storage/mcq.json', 'r') as f:
                 mc_data = json.load(f)  # Read as JSON data
                 f.close()
 
@@ -90,8 +96,8 @@ class Modules:
             modules.send(group_id, f"Status: {online}\nMOTD: {motd}\nOnline players: {online_players}\nMax players: {max_players}")  # Send results
 
             # Flush query data
-            os.system('rm -rf mcq.json')
-            os.system('touch mcq.json')
+            os.system('rm -rf storage/mcq.json')
+            os.system('touch storage/mcq.json')
 
         def get_uuid(self, username):
             '''
@@ -99,18 +105,18 @@ class Modules:
             '''
             self.uuid_res = requests.get(self.minecraft_api + username)
 
-            with open('uuid.json', 'w') as f:
+            with open('storage/uuid.json', 'w') as f:
                 f.write(self.uuid_res.text)
                 f.close()
             
-            with open('uuid.json', 'r') as f:
+            with open('storage/uuid.json', 'r') as f:
                 self.uuid_data = json.load(f)
                 f.close()
 
             self.uuid = self.uuid_data['id']
 
-            os.system('rm -rf uuid.json')
-            os.system('touch uuid.json')
+            os.system('rm -rf storage/uuid.json')
+            os.system('touch storage/uuid.json')
 
         def hyp_info(self, username):
             '''
@@ -119,11 +125,11 @@ class Modules:
             self.get_uuid(username)
             self.hyp_basic_data_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.uuid}')
 
-            with open('hyp.json', 'w') as f:
+            with open('storage/hyp.json', 'w') as f:
                 f.write(self.hyp_basic_data_res.text)
                 f.close()
             
-            with open('hyp.json', 'r') as f:
+            with open('storage/hyp.json', 'r') as f:
                 self.hyp_basic_data = json.load(f)
                 f.close()
 
@@ -148,8 +154,8 @@ class Modules:
             modules.send(group_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_win_games}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_lost_games}')
 
             # Flush cache
-            os.system('rm -rf hyp.json')
-            os.system('touch hyp.json')
+            os.system('rm -rf storage/hyp.json')
+            os.system('touch storage/hyp.json')
 
     def random_sexy(self, uid):
         '''
@@ -223,7 +229,7 @@ class Modules:
             '''
             uid = str(uid)  # Convert UID from int to str
 
-            with open('economy.json', 'r') as f:  # Open storage file and load the data
+            with open('storage/economy.json', 'r') as f:  # Open storage file and load the data
                 economy_stats = json.load(f)  # Get the coins this user have
                 f.close()
 
@@ -239,7 +245,7 @@ class Modules:
 
             income = random.randint(-500, 1000)  # Random income
 
-            with open('economy.json', 'r') as f:  # Open storage file and load the data
+            with open('storage/economy.json', 'r') as f:  # Open storage file and load the data
                 economy_stats = json.load(f)
                 f.close()
 
@@ -254,7 +260,7 @@ class Modules:
                 f.close()
 
             if income > 0:  # You got some money!
-                modules.send(group_id, f"You got ${income}.")  # How much did you earn?
+                modules.send(group_id, f"You got ${income}.")
             elif income < 0:  # Too bad!
                 modules.send(group_id, f"You lost ${income}.")
             elif income == 0:
@@ -264,7 +270,7 @@ class Modules:
         '''
         Send a help message.
         '''
-        self.send(group_id, "Keywords:\n\ntb: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-stats: Get your Hypixel status.\nUsage: /hyp-stats {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send(group_id, "Keywords:\n\nbpp: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-stats: Get your Hypixel status.\nUsage: /hyp-stats {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 def main(msg, uid):
@@ -277,10 +283,18 @@ def main(msg, uid):
     with open('insults.txt', 'r') as f:
         insults = f.readlines()
         insults = [i.strip('\n') for i in insults]
+        f.close()
+
+    # Insults storage
+    with open('storage/insult_record.json', 'r') as f:
+        insults_record = json.load(f)
+        f.close()
+
     # Insults detection
     for i in insults:
         if i in msg:
             modules.send(group_id, 'Language!')
+            insults_record[uid] += 1
 
     # Respond so that we know the bot is online
     if msg == 'bpp':
@@ -306,14 +320,6 @@ def main(msg, uid):
     # News
     elif msg == '/news':
         modules.get_news()
-    
-    # Chat detection
-    elif msg == '/chat-on':
-        modules.send(group_id, "Chat mode ON.")
-        modules.chat_stats = True
-    elif msg == '/chat-off':
-        modules.send(group_id, "Chat mode OFF.")
-        modules.chat_stats = False
 
     # Times keywords
     elif 'technoblade' in msg or 'techno' in msg:
@@ -325,6 +331,13 @@ def main(msg, uid):
         economy.get_current(uid)
     elif msg == '^work':  # Get money
         economy.work(uid)
+
+    # Send too much insults
+    elif insults_record[uid] > 10:
+        modules.send(group_id, 'You have already said 10 insults today. 5 more and you will be muted.')
+    elif insults_record[uid] > 15:
+        modules.send(group_id, 'You will now be muted.')
+        modules.mute(uid, 1800)  # Mute
 
     # Send help
     elif msg == '/help':
