@@ -63,6 +63,7 @@ class Modules:
             Initialize some APIs.
             '''
             self.minecraft_api = 'https://api.mojang.com/users/profiles/minecraft/'  # Get a player's UUID
+            self.hypixel_api_key = '38bf6dbd-03e6-4c1d-ba9c-ce5f10903c45'  # Hypixel API key
 
         def mc_query(self, host, port=25565):
             '''
@@ -96,8 +97,59 @@ class Modules:
             '''
             Get the UUID of a player.
             '''
-            uuid = requests.get(self.minecraft_api + username)
-            return uuid
+            self.uuid_res = requests.get(self.minecraft_api + username)
+
+            with open('uuid.json', 'w') as f:
+                f.write(self.uuid_res.text)
+                f.close()
+            
+            with open('uuid.json', 'r') as f:
+                self.uuid_data = json.load(f)
+                f.close()
+
+            self.uuid = self.uuid_data['id']
+
+            os.system('rm -rf uuid.json')
+            os.system('touch uuid.json')
+
+        def hyp_info(self, username):
+            '''
+            Get the basic information of a player in Hypixel.
+            '''
+            self.get_uuid(username)
+            self.hyp_basic_data_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.uuid}')
+
+            with open('hyp.json', 'w') as f:
+                f.write(self.hyp_basic_data_res.text)
+                f.close()
+            
+            with open('hyp.json', 'r') as f:
+                self.hyp_basic_data = json.load(f)
+                f.close()
+
+            # Player data
+            self.hyp_displayname = self.hyp_basic_data['player']['displayname']  # Display name
+
+            # Bedwars data
+            self.hyp_bedwars_exp = self.hyp_basic_data['player']['stats']['Bedwars']['Experience']
+            self.hyp_bedwars_games_played = self.hyp_basic_data['player']['stats']['Bedwars']['games_played_bedwars']
+            self.hyp_bedwars_coins = self.hyp_basic_data['player']['stats']['Bedwars']['coins']
+            self.hyp_bedwars_item_purchased = self.hyp_basic_data['player']['stats']['Bedwars']['_items_purchased_bedwars']
+            self.hyp_bedwars_kills = self.hyp_basic_data['player']['stats']['Bedwars']['kills_bedwars']
+            self.hyp_bedwars_final_kills = self.hyp_basic_data['player']['stats']['Bedwars']['final_kills_bedwars']
+            self.hyp_bedwars_deaths = self.hyp_basic_data['player']['stats']['Bedwars']['deaths_bedwars']
+            self.hyp_bedwars_final_deaths = self.hyp_basic_data['player']['stats']['Bedwars']['final_deaths_bedwars']
+            # TODO: Beds broken
+            self.hyp_bedwars_lost_beds = self.hyp_basic_data['player']['stats']['Bedwars']['beds_lost_bedwars']
+            self.hyp_bedwars_win_games = self.hyp_basic_data['player']['stats']['Bedwars']['wins_bedwars']
+            self.hyp_bedwars_winstreak = self.hyp_basic_data['player']['stats']['Bedwars']['winstreak']
+            self.hyp_bedwars_lost_games = self.hyp_basic_data['player']['stats']['Bedwars']['losses_bedwars']
+
+            modules.send(group_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_win_games}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_lost_games}')
+
+            # Flush cache
+            os.system('rm -rf hyp.json')
+            os.system('touch hyp.json')
 
     def random_sexy(self, uid):
         '''
@@ -212,7 +264,7 @@ class Modules:
         '''
         Send a help message.
         '''
-        self.send(group_id, "Keywords:\n\ntb: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nChat mode: Used to chat with the bot (BETA). While in this mode, every message will be given to the bot and the bot will give a response\nUsage:\n/chat-on: Turn the mode on.\n/chat-off: Turn the mode off.\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send(group_id, "Keywords:\n\ntb: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-stats: Get your Hypixel status.\nUsage: /hyp-stats {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 def main(msg, uid):
@@ -234,9 +286,12 @@ def main(msg, uid):
     if msg == 'bpp':
         modules.send(group_id, '?')
 
+    # Minecraft
     # Minecraft server detect
     elif msg[0:6] == '/query':
         minecraft.mc_query(msg[7:])
+    elif msg[0:10] == '/hyp-stats':
+        minecraft.hyp_info(msg[11:])
 
     # Random images
     elif msg == '/randomsexy':
