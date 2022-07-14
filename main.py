@@ -179,14 +179,11 @@ class Modules:
             '''
             uid = str(uid)  # Convert UID from int to str
 
-            try:
-                with open(f'economy/{uid}/coins.txt', 'r') as f:  # Open storage file and load the data
-                    coins = f.readline()  # Get the coins this user have
-                    f.close()
-            except FileNotFoundError:  # No data file?
-                os.system(f'touch economy/{uid}')
-                os.system(f'touch economy/{uid}/coins.txt')
-                modules.send(group_id, 'Please use the command again!')
+            with open('economy.json', 'r') as f:  # Open storage file and load the data
+                economy_stats = json.load(f)  # Get the coins this user have
+                f.close()
+
+            coins = economy_stats[uid]  # Get your coins
 
             modules.send(group_id, f"Your current economy status:\nCoins: {coins}")  # Send the results
 
@@ -198,26 +195,18 @@ class Modules:
 
             income = random.randint(-500, 1000)  # Random income
 
-            try:
-                with open(f'economy/{uid}/coins.txt', 'r') as f:  # Open storage file and load the data
-                    coins = f.readline()
-                    f.close()
-            except FileNotFoundError:  # No data file?
-                os.system(f'touch economy/{uid}')
-                os.system(f'touch economy/{uid}/coins.txt')
-                modules.send('Please use the command again!')
+            with open('economy.json', 'r') as f:  # Open storage file and load the data
+                economy_stats = json.load(f)
+                f.close()
 
+            coins = economy_stats[uid]  # Get your coins
             coins = int(coins)  # Convert coins to int so that we can add the income
             coins += income  # Change current status
+            coins = str(coins)  # Convert coins to str so that we can dump them
+            economy_stats[uid] = coins  # Save it to the dict
 
-            # Flush status
-            os.system(f'rm -rf economy/{uid}/coins.txt')
-            os.system(f'touch economy/{uid}/coins.txt')
-
-            coins = str(coins)  # Change to str so that we can write it into the data file
-
-            with open(f'economy/{uid}/coins.txt', 'w') as f:  # Save the current status
-                f.write(coins)
+            with open('economy.json', 'w') as f:  # Dump the current status
+                json.dump(economy_stats, f)
                 f.close()
 
             if income > 0:  # You got some money!
@@ -285,7 +274,7 @@ def main(msg, uid):
 
     # Economy
     # Command inspired from Discord bot: UnbelievaBoat
-    elif msg == '^bal':  # Current status
+    elif msg == '^balance' or msg == '^bal':  # Current status
         economy.get_current(uid)
     elif msg == '^work':  # Get money
         economy.work(uid)
