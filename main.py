@@ -233,7 +233,7 @@ class Modules:
                 economy_stats = json.load(f)  # Get the coins this user have
                 f.close()
 
-            coins = economy_stats[uid]  # Get your coins
+            coins = economy_stats[uid]['coins']  # Get your coins
 
             modules.send(group_id, f"Your current economy status:\nCoins: {coins}")  # Send the results
 
@@ -249,13 +249,13 @@ class Modules:
                 economy_stats = json.load(f)
                 f.close()
 
-            coins = economy_stats[uid]  # Get your coins
+            coins = economy_stats[uid]['coins']  # Get your coins
             coins = int(coins)  # Convert coins to int so that we can add the income
             coins += income  # Change current status
             coins = str(coins)  # Convert coins to str so that we can dump them
-            economy_stats[uid] = coins  # Save it to the dict
+            economy_stats[uid]['coins'] = coins  # Save it to the dict
 
-            with open('economy.json', 'w') as f:  # Dump the current status
+            with open('storage/economy.json', 'w') as f:  # Dump the current status
                 json.dump(economy_stats, f)
                 f.close()
 
@@ -278,23 +278,17 @@ def main(msg, uid):
     Get the keyword of a sentence, then send a proper request to the server.
     '''
     msg = msg.lower()
+    uid = str(uid)
 
     # Wordlist for insult detection
     with open('insults.txt', 'r') as f:
         insults = f.readlines()
         insults = [i.strip('\n') for i in insults]
         f.close()
-
-    # Insults storage
-    with open('storage/insult_record.json', 'r') as f:
-        insults_record = json.load(f)
-        f.close()
-
     # Insults detection
     for i in insults:
         if i in msg:
             modules.send(group_id, 'Language!')
-            insults_record[uid] += 1
 
     # Respond so that we know the bot is online
     if msg == 'bpp':
@@ -331,13 +325,6 @@ def main(msg, uid):
         economy.get_current(uid)
     elif msg == '^work':  # Get money
         economy.work(uid)
-
-    # Send too much insults
-    elif insults_record[uid] > 10:
-        modules.send(group_id, 'You have already said 10 insults today. 5 more and you will be muted.')
-    elif insults_record[uid] > 15:
-        modules.send(group_id, 'You will now be muted.')
-        modules.mute(uid, 1800)  # Mute
 
     # Send help
     elif msg == '/help':
