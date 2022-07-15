@@ -172,14 +172,15 @@ class Modules:
         Get the wallpaper of the day and send it to chat.
         '''
         self.wotd_res = requests.get(self.wotd_api)  # Get data
-        self.wotd_result = self.wotd_res.json()  # Get JSON data
+        if self.wotd_res.content:
+            self.wotd_result = self.wotd_res.json()  # Get JSON data
 
         # Get image details and the image itself
         self.wotd_copyright = self.wotd_result['images'][0]['copyright']
         self.wotd_title = self.wotd_result['images'][0]['title']
-        self.wotd_img_url = 'http://cn.bing.com' + self.wotd_result['images'][0]['url']
+        self.wotd_img_url = 'https://cn.bing.com' + self.wotd_result['images'][0]['url']
 
-        self.send(group_id, f"[CQ:image,file={self.wotd_img_url}]")  # Send image
+        self.send(group_id, f"[CQ:image,file={self.wotd_img_url[:self.wotd_img_url.find('&rf')]}]")  # Send the image
         self.send(group_id, f'Title: {self.wotd_title}\nCopyright: {self.wotd_copyright}')  # Send description
 
     def get_news(self):
