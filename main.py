@@ -532,7 +532,7 @@ def main(msg, uid):
 
     # Respond so that we know the bot is online
     if msg == 'bpp':
-        modules.send(group_id, '?')
+        modules.send_public_message(group_id, '?')
 
     # Minecraft
     # Minecraft server detect
