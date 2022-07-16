@@ -32,9 +32,15 @@ class Modules:
         self.wotd_api = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'  # Wallpaper API from Bing
         self.news_api = 'http://c.m.163.com/nc/article/headline/T1348647853363/0-40.html'  # Headline news API from Netease
 
-    def send(self, group_id, msg):
+    def send(self, group_id, user_id, msg):
         '''
         Sends a message to the group.
+        '''
+        requests.get(f"http://127.0.0.1:5700/send_group_msg?group_id={str(group_id)}&message=[CQ:at,qq={user_id}]\n{msg}")  # Do the request to send the message
+
+    def send_public_message(self, group_id, msg):
+        '''
+        Sends a message to the group without @ing people.
         '''
         requests.get(f"http://127.0.0.1:5700/send_group_msg?group_id={str(group_id)}&message={msg}")  # Do the request to send the message
 
@@ -44,16 +50,16 @@ class Modules:
         '''
         requests.get(f"http://127.0.0.1:5700/send_private_msg?user_id={str(user_id)}&message={msg}")  # Do the request to send the message
 
-    def calc(self, equation):
+    def calc(self, user_id, equation):
         '''
         Calculate something and send the result.
         '''
         try:
             self.calc_result = eval(equation[6:])  # Get the result
         except Exception as e:  # Example: a/0
-            self.send(group_id, e)
+            self.send(group_id, user_id, e)
         else:  # Nothing wrong, send the results
-            self.send(group_id, self.calc_result)
+            self.send(group_id, user_id, self.calc_result)
 
     class Minecraft:
         def __init__(self):
@@ -63,14 +69,14 @@ class Modules:
             self.minecraft_uuid_api = 'https://api.mojang.com/users/profiles/minecraft/'  # Get a player's UUID
             self.hypixel_api_key = '38bf6dbd-03e6-4c1d-ba9c-ce5f10903c45'  # Hypixel API key
 
-        def mc_query(self, host):
+        def mc_query(self, user_id, host):
             '''
             Detect whether a Minecraft server is online or not.
             '''
             try:
                 self.mc_query_res = requests.get(f"http://127.0.0.1/mcq/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
             except Exception:  # The query server is offline
-                modules.send(group_id, "Query server is offline! Please notify admin!")
+                modules.send(group_id, user_id, "Query server is offline! Please notify admin!")
             # Write data into a json file to convert plain text to JSON data
             with open('storage/mcq.json', 'w') as f:
                 f.write(self.mc_query_res.text)  # Store plain text
@@ -85,7 +91,7 @@ class Modules:
             self.mc_query_motd = self.mc_query_data['motd']['clean']
             self.mc_query_online_players = self.mc_query_data['players']['online']
             self.mc_query_max_players = self.mc_query_data['players']['max']
-            modules.send(group_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
+            modules.send(group_id, user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
 
             # Flush query data
             os.system('rm -rf storage/mcq.json')
@@ -110,7 +116,7 @@ class Modules:
             os.system('rm -rf storage/uuid.json')
             os.system('touch storage/uuid.json')
 
-        def hyp_info(self, username):
+        def hyp_info(self, user_id, username):
             '''
             Get the basic information of a player in Hypixel.
             '''
@@ -143,13 +149,13 @@ class Modules:
             self.hyp_bedwars_winstreak = self.hyp_info_result['player']['stats']['Bedwars']['winstreak']
             self.hyp_bedwars_games_lost = self.hyp_info_result['player']['stats']['Bedwars']['losses_bedwars']
 
-            modules.send(group_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')
+            modules.send(group_id, user_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')
 
             # Flush cache
             os.system('rm -rf storage/hyp.json')
             os.system('touch storage/hyp.json')
 
-    def random_sexy(self, uid):
+    def random_sexy(self, user_id):
         '''
         Get an random sexy image from Pixiv and send it to chat.
         '''
@@ -164,8 +170,8 @@ class Modules:
         self.random_sexy_file_type = self.random_sexy_result['data'][0]['ext']
 
         # Send to the user
-        self.send_to(uid, f'[CQ:image,file={self.random_sexy_img_url}]')  # Send image
-        self.send_to(uid, f'Author: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send description
+        self.send_to(user_id, f'[CQ:image,file={self.random_sexy_img_url}]')  # Send image
+        self.send_to(user_id, f'Author: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send description
 
     def wotd(self):
         '''
@@ -180,8 +186,8 @@ class Modules:
         self.wotd_title = self.wotd_result['images'][0]['title']
         self.wotd_img_url = 'https://cn.bing.com' + self.wotd_result['images'][0]['url']
 
-        self.send(group_id, f"[CQ:image,file={self.wotd_img_url[:self.wotd_img_url.find('&rf')]}]")  # Send the image
-        self.send(group_id, f'Title: {self.wotd_title}\nCopyright: {self.wotd_copyright}')  # Send description
+        self.send_public_message(group_id, f"[CQ:image,file={self.wotd_img_url[:self.wotd_img_url.find('&rf')]}]")  # Send the image
+        self.send_public_message(group_id, f'Title: {self.wotd_title}\nCopyright: {self.wotd_copyright}')  # Send description
 
     def get_news(self):
         '''
@@ -197,7 +203,7 @@ class Modules:
         self.get_news_news4 = self.get_news_result['T1348647853363'][3]['title']
         self.get_news_news5 = self.get_news_result['T1348647853363'][4]['title']
 
-        self.send(group_id, f"1. {self.get_news_news1}\n2. {self.get_news_news2}\n3. {self.get_news_news3}\n4. {self.get_news_news4}\n5. {self.get_news_news5}")  # Send result
+        self.send_public_message(group_id, f"1. {self.get_news_news1}\n2. {self.get_news_news2}\n3. {self.get_news_news3}\n4. {self.get_news_news4}\n5. {self.get_news_news5}")  # Send result
 
     class Timed:
         '''
@@ -211,7 +217,7 @@ class Modules:
             Technoblade! Noooooooooo!
             '''
             if self.timed_localtime[4:10] == 'Jul  1':
-                modules.send(group_id, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
+                modules.send_public_message(group_id, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
     class Economy:
         '''
         Economy system in chat.
@@ -228,7 +234,7 @@ class Modules:
 
             self.get_current_coins = self.get_current_economy_stats[uid]['coins']  # Get your coins
 
-            modules.send(group_id, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
+            modules.send(group_id, uid, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
 
         def work(self, uid):
             '''
@@ -253,17 +259,17 @@ class Modules:
                 f.close()
 
             if self.work_income > 0:  # You got some money!
-                modules.send(group_id, f"You got ${self.work_income}.")
+                modules.send(group_id, uid, f"You got ${self.work_income}.")
             elif self.work_income < 0:  # Too bad!
-                modules.send(group_id, f"You lost ${self.work_income}.")
+                modules.send(group_id, uid, f"You lost ${self.work_income}.")
             elif self.work_income == 0:
-                modules.send(group_id, 'Nothing happened...')
+                modules.send(group_id, uid, 'Nothing happened...')
 
     def help_(self):
         '''
         Send a help message.
         '''
-        self.send(group_id, "Keywords:\n\nbpp: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-stats: Get your Hypixel status.\nUsage: /hyp-stats {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send_public_message(group_id, "Keywords:\n\nbpp: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-stats: Get your Hypixel status.\nUsage: /hyp-stats {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 def main(msg, uid):
@@ -281,7 +287,7 @@ def main(msg, uid):
     # Insults detection
     for i in insults:
         if i in msg:
-            modules.send(group_id, 'Language!')
+            modules.send(group_id, uid, 'Language!')
 
     # Respond so that we know the bot is online
     if msg == 'bpp':
@@ -343,6 +349,6 @@ if __name__ == '__main__':
     minecraft = Modules.Minecraft()
     timed = Modules.Timed()
     economy = Modules.Economy()
-    modules.send(group_id, "Bot-PP now ONLINE!")  # Inform others that the bot is online
+    modules.send_public_message(group_id, "Bot-PP now ONLINE!")  # Inform others that the bot is online
 
     app.run(host='127.0.0.1', port=9000)
