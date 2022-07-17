@@ -498,16 +498,6 @@ def main(msg, uid):
     msg = msg.lower()
     uid = str(uid)
 
-    # Wordlist for insult detection
-    with open('insults.txt', 'r') as f:
-        insults = f.readlines()
-        insults = [i.strip('\n') for i in insults]
-        f.close()
-    # Insults detection
-    for i in insults:
-        if i in msg:
-            modules.send(group_id, uid, 'Language!')
-
     # Respond so that we know the bot is online
     if msg == 'bpp':
         modules.send_public_message(group_id, '?')
@@ -556,16 +546,6 @@ def personal_main(msg, uid):
     '''
     msg = msg.lower()
     uid = str(uid)
-
-    # Wordlist for insult detection
-    with open('insults.txt', 'r') as f:
-        insults = f.readlines()
-        insults = [i.strip('\n') for i in insults]
-        f.close()
-    # Insults detection
-    for i in insults:
-        if i in msg:
-            personal_modules.send(uid, 'Language!')
 
     # Respond so that we know the bot is online
     if msg == 'bpp':
@@ -616,7 +596,7 @@ def server():
     '''
     data = request.get_json()  #  Get JSON data
     message = data['raw_message']  #  Get the message
-    user_id = data['sender']['user_id']  # The user id of the sender
+    user_id = data['user_id']  # The user id of the sender
     if data['message_type'] == 'group':  # Only respond to group messages!
         main(message, user_id)  # Send to the get_keyword function to extract the keyword
     elif data['message_type'] == 'private':
