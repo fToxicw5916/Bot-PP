@@ -28,7 +28,7 @@ class Modules:
         Initialize some variables.
         '''
         # APIs
-        self.random_sexy_api = 'https://api.lolicon.app/setu/v2?r18=0&num=1'  # API for random sexy
+        self.random_sexy_api = 'https://api.lolicon.app/setu/v2?r18=0&num=5'  # Setu API for random sexy
         self.wotd_api = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'  # Wallpaper API from Bing
         self.news_api = 'http://c.m.163.com/nc/article/headline/T1348647853363/0-40.html'  # Headline news API from Netease
 
@@ -77,59 +77,34 @@ class Modules:
                 self.mc_query_res = requests.get(f"http://127.0.0.1/mcq/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
             except Exception:  # The query server is offline
                 modules.send(group_id, user_id, "Query server is offline! Please notify admin!")
-            # Write data into a json file to convert plain text to JSON data
-            with open('storage/mcq.json', 'w') as f:
-                f.write(self.mc_query_res.text)  # Store plain text
-                f.close()
-
-            with open('storage/mcq.json', 'r') as f:
-                self.mc_query_data = json.load(f)  # Read as JSON data
-                f.close()
+            self.mc_query_result = self.mc_query_res.json()  # Get JSON data
 
             # Get server details
-            self.mc_query_online = self.mc_query_data['status']
-            self.mc_query_motd = self.mc_query_data['motd']['clean']
-            self.mc_query_online_players = self.mc_query_data['players']['online']
-            self.mc_query_max_players = self.mc_query_data['players']['max']
-            modules.send(group_id, user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
-
-            # Flush query data
-            os.system('rm -rf storage/mcq.json')
-            os.system('touch storage/mcq.json')
+            if self.mc_query_result['status'] == 'Online':
+                self.mc_query_online = self.mc_query_result['status']
+                self.mc_query_motd = self.mc_query_result['motd']['clean']
+                self.mc_query_online_players = self.mc_query_result['players']['online']
+                self.mc_query_max_players = self.mc_query_result['players']['max']
+                modules.send(group_id, user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
+            else:
+                modules.send(group_id, user_id, 'The server is offline!')  # The server is offline
 
         def get_uuid(self, username):
             '''
             Get the UUID of a player.
             '''
-            self.get_uuid_res = requests.get(self.minecraft_uuid_api + username)
+            self.get_uuid_res = requests.get(self.minecraft_uuid_api + username)  # Get data from API
+            self.get_uuid_result = self.get_uuid_res.json()  # Get JSON data
 
-            with open('storage/uuid.json', 'w') as f:
-                f.write(self.get_uuid_res.text)
-                f.close()
-            
-            with open('storage/uuid.json', 'r') as f:
-                self.get_uuid_result = json.load(f)
-                f.close()
-
-            self.get_uuid_uuid = self.get_uuid_result['id']
-
-            os.system('rm -rf storage/uuid.json')
-            os.system('touch storage/uuid.json')
+            self.get_uuid_uuid = self.get_uuid_result['id']  # UUID
 
         def hyp_info(self, user_id, username):
             '''
             Get the basic information of a player in Hypixel.
             '''
-            self.get_uuid(username)
-            self.hyp_info_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
-
-            with open('storage/hyp.json', 'w') as f:
-                f.write(self.hyp_info_res.text)
-                f.close()
-            
-            with open('storage/hyp.json', 'r') as f:
-                self.hyp_info_result = json.load(f)
-                f.close()
+            self.get_uuid(username)  # Get the player's UUID first
+            self.hyp_info_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get info from API
+            self.hyp_info_result = self.hyp_info_res.json()  # Get JSON data
 
             # Player data
             self.hyp_displayname = self.hyp_info_result['player']['displayname']  # Display name
@@ -149,11 +124,7 @@ class Modules:
             self.hyp_bedwars_winstreak = self.hyp_info_result['player']['stats']['Bedwars']['winstreak']
             self.hyp_bedwars_games_lost = self.hyp_info_result['player']['stats']['Bedwars']['losses_bedwars']
 
-            modules.send(group_id, user_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')
-
-            # Flush cache
-            os.system('rm -rf storage/hyp.json')
-            os.system('touch storage/hyp.json')
+            modules.send(group_id, user_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')  # Send results
 
     def random_sexy(self, user_id):
         '''
@@ -281,7 +252,7 @@ class PersonalModules:
         Initialize some variables.
         '''
         # APIs
-        self.random_sexy_api = 'https://api.lolicon.app/setu/v2?r18=0&num=1'  # API for random sexy
+        self.random_sexy_api = 'https://api.lolicon.app/setu/v2?r18=0&num=5'  # Setu API for random sexy
         self.wotd_api = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'  # Wallpaper API from Bing
         self.news_api = 'http://c.m.163.com/nc/article/headline/T1348647853363/0-40.html'  # Headline news API from Netease
 
@@ -318,59 +289,34 @@ class PersonalModules:
                 self.mc_query_res = requests.get(f"http://127.0.0.1/mcq/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
             except Exception:  # The query server is offline
                 personal_modules.send(user_id, "Query server is offline! Please notify admin!")
-            # Write data into a json file to convert plain text to JSON data
-            with open('storage/mcq.json', 'w') as f:
-                f.write(self.mc_query_res.text)  # Store plain text
-                f.close()
-
-            with open('storage/mcq.json', 'r') as f:
-                self.mc_query_data = json.load(f)  # Read as JSON data
-                f.close()
+            self.mc_query_result = self.mc_query_res.json()  # Get JSON data
 
             # Get server details
-            self.mc_query_online = self.mc_query_data['status']
-            self.mc_query_motd = self.mc_query_data['motd']['clean']
-            self.mc_query_online_players = self.mc_query_data['players']['online']
-            self.mc_query_max_players = self.mc_query_data['players']['max']
-            personal_modules.send(user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
-
-            # Flush query data
-            os.system('rm -rf storage/mcq.json')
-            os.system('touch storage/mcq.json')
+            if self.mc_query_result['status'] == 'Online':
+                self.mc_query_online = self.mc_query_result['status']
+                self.mc_query_motd = self.mc_query_result['motd']['clean']
+                self.mc_query_online_players = self.mc_query_result['players']['online']
+                self.mc_query_max_players = self.mc_query_result['players']['max']
+                personal_modules.send(user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
+            else:
+                personal_modules.send(user_id, 'The server is offline!')  # Server offline
 
         def get_uuid(self, username):
             '''
             Get the UUID of a player.
             '''
-            self.get_uuid_res = requests.get(self.minecraft_uuid_api + username)
+            self.get_uuid_res = requests.get(self.minecraft_uuid_api + username)  # Get data from API
+            self.get_uuid_result = self.get_uuid_res.json()  # Get JSON data
 
-            with open('storage/uuid.json', 'w') as f:
-                f.write(self.get_uuid_res.text)
-                f.close()
-            
-            with open('storage/uuid.json', 'r') as f:
-                self.get_uuid_result = json.load(f)
-                f.close()
-
-            self.get_uuid_uuid = self.get_uuid_result['id']
-
-            os.system('rm -rf storage/uuid.json')
-            os.system('touch storage/uuid.json')
+            self.get_uuid_uuid = self.get_uuid_result['id']  # UUID
 
         def hyp_info(self, user_id, username):
             '''
             Get the basic information of a player in Hypixel.
             '''
             self.get_uuid(username)
-            self.hyp_info_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
-
-            with open('storage/hyp.json', 'w') as f:
-                f.write(self.hyp_info_res.text)
-                f.close()
-            
-            with open('storage/hyp.json', 'r') as f:
-                self.hyp_info_result = json.load(f)
-                f.close()
+            self.hyp_info_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get info from API
+            self.hyp_info_result = self.hyp_info_res.json()  # Get JSON data
 
             # Player data
             self.hyp_displayname = self.hyp_info_result['player']['displayname']  # Display name
@@ -390,11 +336,7 @@ class PersonalModules:
             self.hyp_bedwars_winstreak = self.hyp_info_result['player']['stats']['Bedwars']['winstreak']
             self.hyp_bedwars_games_lost = self.hyp_info_result['player']['stats']['Bedwars']['losses_bedwars']
 
-            personal_modules.send(user_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')
-
-            # Flush cache
-            os.system('rm -rf storage/hyp.json')
-            os.system('touch storage/hyp.json')
+            personal_modules.send(user_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')  # Send results
 
     def random_sexy(self, user_id):
         '''
@@ -537,9 +479,9 @@ def main(msg, uid):
     # Minecraft
     # Minecraft server detect
     elif msg[0:6] == '/query':
-        minecraft.mc_query(msg[7:])
+        minecraft.mc_query(uid, msg[7:])
     elif msg[0:10] == '/hyp-stats':
-        minecraft.hyp_info(msg[11:])
+        minecraft.hyp_info(uid, msg[11:])
 
     # Random images
     elif msg == '/randomsexy':
