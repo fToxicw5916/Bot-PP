@@ -98,33 +98,45 @@ class Modules:
 
             self.get_uuid_uuid = self.get_uuid_result['id']  # UUID
 
-        def hyp_info(self, user_id, username):
+        def hyp_basic_info(self, uid ,username):
             '''
-            Get the basic information of a player in Hypixel.
+            Get basic information about a player in Hypixel
+            '''
+            self.get_uuid(username)  # First, get UUID
+            self.hyp_basic_info_res = requests.get(f'https://api.hypixel.net/player?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get basic info from Hypixel API
+            self.hyp_basic_info_result = self.hyp_basic_info_res.json()  # Get JSON data from the response
+
+            # Data
+            self.hyp_basic_info_displayname = self.hyp_basic_info_result['player']['displayname']
+            self.hyp_basic_info_rank = self.hyp_basic_info_result['player']['newPackageRank']
+            self.hyp_basic_info_most_recent_game = self.hyp_basic_info_result['player']['mostRecentGameType']
+
+            modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
+
+        def hyp_bedwars_info(self, user_id, username):
+            '''
+            Get the information of a player in Hypixel bedwars.
             '''
             self.get_uuid(username)  # Get the player's UUID first
-            self.hyp_info_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get info from API
-            self.hyp_info_result = self.hyp_info_res.json()  # Get JSON data
+            self.hyp_bedwars_info_res = requests.get(f'https://api.hypixel.net/player?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get info from API
+            self.hyp_bedwars_info_result = self.hyp_bedwars_info_res.json()  # Get JSON data
 
-            # Player data
-            self.hyp_displayname = self.hyp_info_result['player']['displayname']  # Display name
-
-            # Bedwars data
-            self.hyp_bedwars_exp = self.hyp_info_result['player']['stats']['Bedwars']['Experience']
-            self.hyp_bedwars_games_played = self.hyp_info_result['player']['stats']['Bedwars']['games_played_bedwars']
-            self.hyp_bedwars_coins = self.hyp_info_result['player']['stats']['Bedwars']['coins']
-            self.hyp_bedwars_item_purchased = self.hyp_info_result['player']['stats']['Bedwars']['_items_purchased_bedwars']
-            self.hyp_bedwars_kills = self.hyp_info_result['player']['stats']['Bedwars']['kills_bedwars']
-            self.hyp_bedwars_final_kills = self.hyp_info_result['player']['stats']['Bedwars']['final_kills_bedwars']
-            self.hyp_bedwars_deaths = self.hyp_info_result['player']['stats']['Bedwars']['deaths_bedwars']
-            self.hyp_bedwars_final_deaths = self.hyp_info_result['player']['stats']['Bedwars']['final_deaths_bedwars']
+            # Data
+            self.hyp_bedwars_info_exp = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['Experience']
+            self.hyp_bedwars_info_games_played = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['games_played_bedwars']
+            self.hyp_bedwars_info_coins = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['coins']
+            self.hyp_bedwars_info_item_purchased = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['_items_purchased_bedwars']
+            self.hyp_bedwars_info_kills = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['kills_bedwars']
+            self.hyp_bedwars_info_final_kills = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_kills_bedwars']
+            self.hyp_bedwars_info_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['deaths_bedwars']
+            self.hyp_bedwars_info_final_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_deaths_bedwars']
             # TODO: Beds broken
-            self.hyp_bedwars_beds_lost = self.hyp_info_result['player']['stats']['Bedwars']['beds_lost_bedwars']
-            self.hyp_bedwars_games_won = self.hyp_info_result['player']['stats']['Bedwars']['wins_bedwars']
-            self.hyp_bedwars_winstreak = self.hyp_info_result['player']['stats']['Bedwars']['winstreak']
-            self.hyp_bedwars_games_lost = self.hyp_info_result['player']['stats']['Bedwars']['losses_bedwars']
+            self.hyp_bedwars_info_beds_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['beds_lost_bedwars']
+            self.hyp_bedwars_info_games_won = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['wins_bedwars']
+            self.hyp_bedwars_info_winstreak = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['winstreak']
+            self.hyp_bedwars_info_games_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['losses_bedwars']
 
-            modules.send(group_id, user_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')  # Send results
+            modules.send(group_id, user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
 
     def random_sexy(self, user_id):
         '''
@@ -191,7 +203,7 @@ class Modules:
                 modules.send_public_message(group_id, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
     class Economy:
         '''
-        Economy system in chat.
+        Economy system in chat. Inspired by UnbelievaBoat the discord bot!
         '''
         def get_current(self, uid):
             '''
@@ -240,7 +252,7 @@ class Modules:
         '''
         Send a help message.
         '''
-        self.send_public_message(group_id, "Keywords:\n\nbpp: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-stats: Get your Hypixel status.\nUsage: /hyp-stats {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send_public_message(group_id, "Keywords:\n\nbpp: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-info: Get your Hypixel basic info.\nUsage: /hyp-info {Username}\n\n/bw: Get your Hypixel bedwars info.\nUsage: /bw {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 class PersonalModules:
@@ -310,16 +322,28 @@ class PersonalModules:
 
             self.get_uuid_uuid = self.get_uuid_result['id']  # UUID
 
-        def hyp_info(self, user_id, username):
+        def hyp_basic_info(self, uid ,username):
+            '''
+            Get basic information about a player in Hypixel
+            '''
+            self.get_uuid(username)  # First, get UUID
+            self.hyp_basic_info_res = requests.get(f'https://api.hypixel.net/player?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get basic info from Hypixel API
+            self.hyp_basic_info_result = self.hyp_basic_info_res.json()  # Get JSON data from the response
+
+            # Data
+            self.hyp_basic_info_displayname = self.hyp_basic_info_result['player']['displayname']
+            self.hyp_basic_info_rank = self.hyp_basic_info_result['player']['newPackageRank']
+            self.hyp_basic_info_most_recent_game = self.hyp_basic_info_result['player']['mostRecentGameType']
+
+            personal_modules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
+
+        def hyp_bedwars_info(self, user_id, username):
             '''
             Get the basic information of a player in Hypixel.
             '''
             self.get_uuid(username)
             self.hyp_info_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get info from API
             self.hyp_info_result = self.hyp_info_res.json()  # Get JSON data
-
-            # Player data
-            self.hyp_displayname = self.hyp_info_result['player']['displayname']  # Display name
 
             # Bedwars data
             self.hyp_bedwars_exp = self.hyp_info_result['player']['stats']['Bedwars']['Experience']
@@ -336,7 +360,7 @@ class PersonalModules:
             self.hyp_bedwars_winstreak = self.hyp_info_result['player']['stats']['Bedwars']['winstreak']
             self.hyp_bedwars_games_lost = self.hyp_info_result['player']['stats']['Bedwars']['losses_bedwars']
 
-            personal_modules.send(user_id, f'Hypixel player information:\n\nPlayer data:\nPlayer display name: {self.hyp_displayname}\n\nBedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')  # Send results
+            personal_modules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')  # Send results
 
     def random_sexy(self, user_id):
         '''
@@ -403,7 +427,7 @@ class PersonalModules:
                 personal_modules.send(uid, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
     class Economy:
         '''
-        Economy system in chat.
+        Economy system in chat. Inspired by UnbelievaBoat the discord bot!
         '''
         def get_current(self, uid):
             '''
@@ -452,7 +476,7 @@ class PersonalModules:
         '''
         Send a help message.
         '''
-        self.send(uid, "Keywords:\n\nbpp: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-stats: Get your Hypixel status.\nUsage: /hyp-stats {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send(uid, "Keywords:\n\nbpp: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-info: Get your Hypixel basic info.\nUsage: /hyp-info {Username}\n\n/bw: Get your Hypixel bedwars info.\nUsage: /bw {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/randomsexy: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 def main(msg, uid):
@@ -477,11 +501,12 @@ def main(msg, uid):
         modules.send_public_message(group_id, '?')
 
     # Minecraft
-    # Minecraft server detect
-    elif msg[0:6] == '/query':
+    elif msg[0:6] == '/query':  # Minecraft server detect
         minecraft.mc_query(uid, msg[7:])
-    elif msg[0:10] == '/hyp-stats':
-        minecraft.hyp_info(uid, msg[11:])
+    elif msg[0:9] == '/hyp-info':  # Hypixel basic info
+        minecraft.hyp_basic_info(uid, msg[10:])
+    elif msg[0:3] == '/bw':  # Hypixel bedwars info
+        minecraft.hyp_bedwars_info(uid, msg[4:])
 
     # Random images
     elif msg == '/randomsexy':
@@ -535,11 +560,12 @@ def personal_main(msg, uid):
         personal_modules.send(uid, '?')
 
     # Minecraft
-    # Minecraft server detect
-    elif msg[0:6] == '/query':
+    elif msg[0:6] == '/query':  # Minecraft server detect
         personal_minecraft.mc_query(uid, msg[7:])
-    elif msg[0:10] == '/hyp-stats':
-        personal_minecraft.hyp_info(uid, msg[11:])
+    elif msg[0:9] == '/hyp-info':  # Hypixel basic info
+        personal_minecraft.hyp_basic_info(uid, msg[10:])
+    elif msg[0:3] == '/bw':  # Hypixel bedwars info
+        personal_minecraft.hyp_bedwars_info(uid, msg[4:])
 
     # Random images
     elif msg == '/randomsexy':
