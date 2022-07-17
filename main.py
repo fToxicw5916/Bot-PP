@@ -144,6 +144,25 @@ class Modules:
 
             modules.send(group_id, user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
 
+        def hyp_skyblock_info(self, uid, username, msg):
+            '''
+            Get the information of a player in Hypixel skyblock.
+            '''
+            msg = int(msg)
+            self.get_uuid(username)
+
+            self.hyp_skyblock_info_res = requests.get(f'https://sky.shiiyu.moe/api/v2/profile/{username}')
+            self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
+            self.hyp_skyblock_info_profile_id_res = requests.get(f'https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
+            self.hyp_skyblock_info_profile_id_result = self.hyp_skyblock_info_profile_id_res.json()
+
+            # Data
+            try:
+                self.hyp_skyblock_info_profile_id = self.hyp_skyblock_info_profile_id_result['profiles'][msg-1]['profile_id']
+                self.hyp_skyblock_info_profile_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile_id]['cute_name']
+            except KeyError:
+                modules.send(group_id, uid, 'Something is wrong with your Hypixel skyblock profile. Please notice admin!')
+
     def random_sexy(self, user_id):
         '''
         Get an random sexy image from Pixiv and send it to chat.
@@ -374,6 +393,25 @@ class PersonalModules:
 
             personal_modules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
 
+        def hyp_skyblock_info(self, uid, username, msg):
+            '''
+            Get the information of a player in Hypixel skyblock.
+            '''
+            msg = int(msg)
+            self.get_uuid(username)
+
+            self.hyp_skyblock_info_res = requests.get(f'https://sky.shiiyu.moe/api/v2/profile/{username}')
+            self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
+            self.hyp_skyblock_info_profile_id_res = requests.get(f'https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
+            self.hyp_skyblock_info_profile_id_result = self.hyp_skyblock_info_profile_id_res.json()
+
+            # Data
+            try:
+                self.hyp_skyblock_info_profile_id = self.hyp_skyblock_info_profile_id_result['profiles'][msg-1]['profile_id']
+                self.hyp_skyblock_info_profile_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile_id]['cute_name']
+            except KeyError:
+                personal_modules.send(uid, 'Something is wrong with your Hypixel skyblock profile. Please notice admin!')
+
     def random_sexy(self, user_id):
         '''
         Get an random sexy image from Pixiv and send it to chat.
@@ -519,6 +557,8 @@ def main(msg, uid):
         minecraft.hyp_basic_info(uid, msg[10:])
     elif msg[0:3] == '/bw':  # Hypixel bedwars info
         minecraft.hyp_bedwars_info(uid, msg[4:])
+    elif msg[0:3] == '/sb':  # Hypixel skyblock info
+        minecraft.hyp_skyblock_info(uid, msg[4:5], msg[6:])
 
     # Random images
     elif msg == '/randomsexy':
@@ -578,6 +618,8 @@ def personal_main(msg, uid):
         personal_minecraft.hyp_basic_info(uid, msg[10:])
     elif msg[0:3] == '/bw':  # Hypixel bedwars info
         personal_minecraft.hyp_bedwars_info(uid, msg[4:])
+    elif msg[0:3] == '/sb':  # Hypixel skyblock info
+        personal_minecraft.hyp_skyblock_info(uid, msg[4:5], msg[6:])
 
     # Random images
     elif msg == '/randomsexy':
