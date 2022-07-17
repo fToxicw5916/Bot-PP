@@ -2,6 +2,7 @@
 The main file for Bot++.
 '''
 # Import needed packages
+from typing import NoReturn  # Doc string
 from flask import Flask, request  # For building a simple server to receiving messages
 import requests  # For sending requests to the bot
 import json  # For managing Minecraft server query response
@@ -32,33 +33,33 @@ class Modules:
         self.wotd_api = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'  # Wallpaper API from Bing
         self.news_api = 'http://c.m.163.com/nc/article/headline/T1348647853363/0-40.html'  # Headline news API from Netease
 
-    def send(self, group_id, user_id, msg):
+    def send(self, group_id: str, user_id: str, msg: str) -> NoReturn:
         '''
         Sends a message to the group.
         '''
-        requests.get(f"http://127.0.0.1:5700/send_group_msg?group_id={str(group_id)}&message=[CQ:at,qq={user_id}]\n{msg}")  # Do the request to send the message
+        requests.get(f"http://127.0.0.1:5700/send_group_msg?group_id={group_id}&message=[CQ:at,qq={user_id}]\n{msg}")  # Do the request to send the message
 
-    def send_public_message(self, group_id, msg):
+    def send_public_message(self, group_id: str, msg: str) -> NoReturn:
         '''
         Sends a message to the group without @ing people.
         '''
-        requests.get(f"http://127.0.0.1:5700/send_group_msg?group_id={str(group_id)}&message={msg}")  # Do the request to send the message
+        requests.get(f"http://127.0.0.1:5700/send_group_msg?group_id={group_id}&message={msg}")  # Do the request to send the message
 
-    def send_to(self, user_id, msg):
+    def send_to(self, user_id: str, msg: str) -> NoReturn:
         '''
         Sends a message to someone.
         '''
         requests.get(f"http://127.0.0.1:5700/send_private_msg?user_id={str(user_id)}&message={msg}")  # Do the request to send the message
 
-    def calc(self, user_id, equation):
+    def calc(self, user_id: str, equation: str) -> NoReturn:
         '''
         Calculate something and send the result.
         '''
         try:
-            self.calc_result = eval(equation[6:])  # Get the result
+            self.calc_result = eval(equation)  # Get the result
         except Exception as e:  # Example: a/0
             self.send(group_id, user_id, e)
-        else:  # Nothing wrong, send the results
+        else:  # Nothing wrong, send the results and return them
             self.send(group_id, user_id, self.calc_result)
 
     class Minecraft:
@@ -69,7 +70,7 @@ class Modules:
             self.minecraft_uuid_api = 'https://api.mojang.com/users/profiles/minecraft/'  # Get a player's UUID
             self.hypixel_api_key = '38bf6dbd-03e6-4c1d-ba9c-ce5f10903c45'  # Hypixel API key
 
-        def mc_query(self, user_id, host):
+        def mc_query(self, user_id: str, host: str) -> NoReturn:
             '''
             Detect whether a Minecraft server is online or not.
             '''
@@ -89,7 +90,7 @@ class Modules:
             else:
                 modules.send(group_id, user_id, 'The server is offline!')  # The server is offline
 
-        def get_uuid(self, username):
+        def get_uuid(self, username: str) -> str:
             '''
             Get the UUID of a player.
             '''
@@ -98,7 +99,7 @@ class Modules:
 
             self.get_uuid_uuid = self.get_uuid_result['id']  # UUID
 
-        def hyp_basic_info(self, uid ,username):
+        def hyp_basic_info(self, uid: str, username: str) -> NoReturn:
             '''
             Get basic information about a player in Hypixel
             '''
@@ -116,7 +117,7 @@ class Modules:
 
             modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
 
-        def hyp_bedwars_info(self, user_id, username):
+        def hyp_bedwars_info(self, user_id: str, username: str) -> NoReturn:
             '''
             Get the information of a player in Hypixel bedwars.
             '''
@@ -144,7 +145,7 @@ class Modules:
 
             modules.send(group_id, user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
 
-    def sexypic(self, user_id):
+    def sexypic(self, user_id: str) -> NoReturn:
         '''
         Get an random sexy image from Pixiv and send it to chat.
         '''
@@ -162,7 +163,7 @@ class Modules:
         self.send_to(user_id, f'[CQ:image,file={self.random_sexy_img_url}]')  # Send image
         self.send_to(user_id, f'Author: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send description
 
-    def wotd(self):
+    def wotd(self) -> NoReturn:
         '''
         Get the wallpaper of the day and send it to chat.
         '''
@@ -178,7 +179,7 @@ class Modules:
         self.send_public_message(group_id, f"[CQ:image,file={self.wotd_img_url[:self.wotd_img_url.find('&rf')]}]")  # Send the image
         self.send_public_message(group_id, f'Title: {self.wotd_title}\nCopyright: {self.wotd_copyright}')  # Send description
 
-    def get_news(self):
+    def get_news(self) -> NoReturn:
         '''
         Get headline news.
         '''
@@ -201,7 +202,7 @@ class Modules:
         def __init__(self):
             self.timed_localtime = time.ctime()  # Get current time
 
-        def tech_no(self):
+        def tech_no(self) -> NoReturn:
             '''
             Technoblade! Noooooooooo!
             '''
@@ -211,7 +212,7 @@ class Modules:
         '''
         Economy system in chat. Inspired by UnbelievaBoat the discord bot!
         '''
-        def get_current(self, uid):
+        def get_current(self, uid: str) -> NoReturn:
             '''
             Get the current economy status of someone.
             '''
@@ -225,7 +226,7 @@ class Modules:
 
             modules.send(group_id, uid, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
 
-        def work(self, uid):
+        def work(self, uid: str) -> NoReturn:
             '''
             Earn coins!
             '''
@@ -254,7 +255,7 @@ class Modules:
             elif self.work_income == 0:
                 modules.send(group_id, uid, 'Nothing happened...')
 
-    def help_(self):
+    def help_(self) -> NoReturn:
         '''
         Send a help message.
         '''
@@ -274,18 +275,18 @@ class PersonalModules:
         self.wotd_api = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'  # Wallpaper API from Bing
         self.news_api = 'http://c.m.163.com/nc/article/headline/T1348647853363/0-40.html'  # Headline news API from Netease
 
-    def send(self, user_id, msg):
+    def send(self, user_id: str, msg: str) -> NoReturn:
         '''
         Sends a message to someone.
         '''
         requests.get(f"http://127.0.0.1:5700/send_private_msg?user_id={str(user_id)}&message={msg}")  # Do the request to send the message
 
-    def calc(self, user_id, equation):
+    def calc(self, user_id: str, equation: str) -> NoReturn:
         '''
         Calculate something and send the result.
         '''
         try:
-            self.calc_result = eval(equation[6:])  # Get the result
+            self.calc_result = eval(equation)  # Get the result
         except Exception as e:  # Example: a/0
             self.send(user_id, e)
         else:  # Nothing wrong, send the results
@@ -299,7 +300,7 @@ class PersonalModules:
             self.minecraft_uuid_api = 'https://api.mojang.com/users/profiles/minecraft/'  # Get a player's UUID
             self.hypixel_api_key = '38bf6dbd-03e6-4c1d-ba9c-ce5f10903c45'  # Hypixel API key
 
-        def mc_query(self, user_id, host):
+        def mc_query(self, user_id: str, host: str) -> NoReturn:
             '''
             Detect whether a Minecraft server is online or not.
             '''
@@ -319,7 +320,7 @@ class PersonalModules:
             else:
                 personal_modules.send(user_id, 'The server is offline!')  # Server offline
 
-        def get_uuid(self, username):
+        def get_uuid(self, username: str) -> NoReturn:
             '''
             Get the UUID of a player.
             '''
@@ -328,7 +329,7 @@ class PersonalModules:
 
             self.get_uuid_uuid = self.get_uuid_result['id']  # UUID
 
-        def hyp_basic_info(self, uid, username):
+        def hyp_basic_info(self, uid: str, username: str) -> NoReturn:
             '''
             Get basic information about a player in Hypixel
             '''
@@ -346,7 +347,7 @@ class PersonalModules:
 
             personal_modules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
 
-        def hyp_bedwars_info(self, user_id, username):
+        def hyp_bedwars_info(self, user_id: str, username: str) -> NoReturn:
             '''
             Get the basic information of a player in Hypixel.
             '''
@@ -374,7 +375,7 @@ class PersonalModules:
 
             personal_modules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
 
-    def sexypic(self, user_id):
+    def sexypic(self, user_id: str) -> NoReturn:
         '''
         Get an random sexy image from Pixiv and send it to chat.
         '''
@@ -392,7 +393,7 @@ class PersonalModules:
         self.send(user_id, f'[CQ:image,file={self.random_sexy_img_url}]')  # Send image
         self.send(user_id, f'Author: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send description
 
-    def wotd(self, uid):
+    def wotd(self, uid: str) -> NoReturn:
         '''
         Get the wallpaper of the day and send it to chat.
         '''
@@ -408,7 +409,7 @@ class PersonalModules:
         self.send(uid, f"[CQ:image,file={self.wotd_img_url[:self.wotd_img_url.find('&rf')]}]")  # Send the image
         self.send(uid, f'Title: {self.wotd_title}\nCopyright: {self.wotd_copyright}')  # Send description
 
-    def get_news(self, uid):
+    def get_news(self, uid: str) -> NoReturn:
         '''
         Get headline news.
         '''
@@ -431,7 +432,7 @@ class PersonalModules:
         def __init__(self):
             self.timed_localtime = time.ctime()  # Get current time
 
-        def tech_no(self, uid):
+        def tech_no(self, uid: str) -> NoReturn:
             '''
             Technoblade! Noooooooooo!
             '''
@@ -441,7 +442,7 @@ class PersonalModules:
         '''
         Economy system in chat. Inspired by UnbelievaBoat the discord bot!
         '''
-        def get_current(self, uid):
+        def get_current(self, uid: str) -> NoReturn:
             '''
             Get the current economy status of someone.
             '''
@@ -455,7 +456,7 @@ class PersonalModules:
 
             personal_modules.send(uid, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
 
-        def work(self, uid):
+        def work(self, uid: str) -> NoReturn:
             '''
             Earn coins!
             '''
@@ -484,14 +485,14 @@ class PersonalModules:
             elif self.work_income == 0:
                 personal_modules.send(uid, 'Nothing happened...')
 
-    def help_(self, uid):
+    def help_(self, uid: str) -> NoReturn:
         '''
         Send a help message.
         '''
         self.send(uid, "Keywords:\n\nbpp: Just a command to check whether the bot is alive or not.\n\n/query: Used to check the basic information about a Minecraft server. No response means that the server is offline.\nUsage: /query {Server address}\n\n/hyp-info: Get your Hypixel basic info.\nUsage: /hyp-info {Username}\n\n/bw: Get your Hypixel bedwars info.\nUsage: /bw {Username}\n\n/calc: Calculate something.\nUsage: /calc {Equation}\n\n/wotd: Get wallpaper of the day from Bing.\nUsage: /wotd\n\n/sexypic: Get a sexy picture from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION!\nUsage: /randomsexy\n\n/news: Get the headline news\nUsage: /news\n\n\n\nEconomy: No real use (for now)\nUsage:\n^balance/^bal: How much cash do you have?\n^work: Work for cash.. or lose them!\n\n\n\nTimed keywords:\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
-def main(msg, uid):
+def main(msg: str, uid: str) -> NoReturn:
     '''
     Get the keyword of a sentence, then send a proper request to the server.
     '''
@@ -518,7 +519,7 @@ def main(msg, uid):
 
     # Calculator
     elif msg[0:5] == '/calc':
-        modules.calc(msg)
+        modules.calc(msg[6:])
 
     # News
     elif msg == '/news':
@@ -540,7 +541,7 @@ def main(msg, uid):
         modules.help_()
 
 
-def personal_main(msg, uid):
+def personal_main(msg: str, uid: str) -> NoReturn:
     '''
     Get the keyword of a sentence, then send a proper request to the server.
     '''
@@ -567,7 +568,7 @@ def personal_main(msg, uid):
 
     # Calculator
     elif msg[0:5] == '/calc':
-        personal_modules.calc(uid, msg)
+        personal_modules.calc(uid, msg[6:])
 
     # News
     elif msg == '/news':
