@@ -134,7 +134,7 @@ class Modules:
                 self.hyp_bedwars_info_final_kills = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_kills_bedwars']
                 self.hyp_bedwars_info_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['deaths_bedwars']
                 self.hyp_bedwars_info_final_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_deaths_bedwars']
-                # TODO: Beds broken
+                self.hyp_bedwars_info_beds_broken = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['beds_broken_bedwars']
                 self.hyp_bedwars_info_beds_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['beds_lost_bedwars']
                 self.hyp_bedwars_info_games_won = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['wins_bedwars']
                 self.hyp_bedwars_info_winstreak = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['winstreak']
@@ -142,7 +142,7 @@ class Modules:
             except KeyError:
                 modules.send(group_id, user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
-            modules.send(group_id, user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
+            modules.send(group_id, user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
 
     def random_sexy(self, user_id):
         '''
@@ -351,28 +351,28 @@ class PersonalModules:
             Get the basic information of a player in Hypixel.
             '''
             self.get_uuid(username)
-            self.hyp_info_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get info from API
-            self.hyp_info_result = self.hyp_info_res.json()  # Get JSON data
+            self.hyp_bedwars_info_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get info from API
+            self.hyp_bedwars_info_result = self.hyp_bedwars_info_res.json()  # Get JSON data
 
             # Bedwars data
             try:
-                self.hyp_bedwars_exp = self.hyp_info_result['player']['stats']['Bedwars']['Experience']
-                self.hyp_bedwars_games_played = self.hyp_info_result['player']['stats']['Bedwars']['games_played_bedwars']
-                self.hyp_bedwars_coins = self.hyp_info_result['player']['stats']['Bedwars']['coins']
-                self.hyp_bedwars_item_purchased = self.hyp_info_result['player']['stats']['Bedwars']['_items_purchased_bedwars']
-                self.hyp_bedwars_kills = self.hyp_info_result['player']['stats']['Bedwars']['kills_bedwars']
-                self.hyp_bedwars_final_kills = self.hyp_info_result['player']['stats']['Bedwars']['final_kills_bedwars']
-                self.hyp_bedwars_deaths = self.hyp_info_result['player']['stats']['Bedwars']['deaths_bedwars']
-                self.hyp_bedwars_final_deaths = self.hyp_info_result['player']['stats']['Bedwars']['final_deaths_bedwars']
-                # TODO: Beds broken
-                self.hyp_bedwars_beds_lost = self.hyp_info_result['player']['stats']['Bedwars']['beds_lost_bedwars']
-                self.hyp_bedwars_games_won = self.hyp_info_result['player']['stats']['Bedwars']['wins_bedwars']
-                self.hyp_bedwars_winstreak = self.hyp_info_result['player']['stats']['Bedwars']['winstreak']
-                self.hyp_bedwars_games_lost = self.hyp_info_result['player']['stats']['Bedwars']['losses_bedwars']
+                self.hyp_bedwars_info_exp = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['Experience']
+                self.hyp_bedwars_info_games_played = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['games_played_bedwars']
+                self.hyp_bedwars_info_coins = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['coins']
+                self.hyp_bedwars_info_item_purchased = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['_items_purchased_bedwars']
+                self.hyp_bedwars_info_kills = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['kills_bedwars']
+                self.hyp_bedwars_info_final_kills = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_kills_bedwars']
+                self.hyp_bedwars_info_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['deaths_bedwars']
+                self.hyp_bedwars_info_final_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_deaths_bedwars']
+                self.hyp_bedwars_info_beds_broken = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['beds_broken_bedwars']
+                self.hyp_bedwars_info_beds_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['beds_lost_bedwars']
+                self.hyp_bedwars_info_games_won = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['wins_bedwars']
+                self.hyp_bedwars_info_winstreak = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['winstreak']
+                self.hyp_bedwars_info_games_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['losses_bedwars']
             except KeyError:
                 personal_modules.send(user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
-            personal_modules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_exp}\nBedwars coins: {self.hyp_bedwars_coins}\nBedwars played: {self.hyp_bedwars_games_played}\nItems purchased: {self.hyp_bedwars_item_purchased}\nKills: {self.hyp_bedwars_kills}\nFinal kills: {self.hyp_bedwars_final_kills}\nDeaths: {self.hyp_bedwars_deaths}\nFinal deaths: {self.hyp_bedwars_final_deaths}\nGames won: {self.hyp_bedwars_games_won}\nWinstreak: {self.hyp_bedwars_winstreak}\nGames lost: {self.hyp_bedwars_games_lost}')  # Send results
+            personal_modules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
 
     def random_sexy(self, user_id):
         '''
