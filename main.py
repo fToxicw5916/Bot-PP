@@ -83,7 +83,7 @@ class Modules:
                 host (str): The Minecraft server's IP/URL.
             """
             try:
-                self.mc_query_res = requests.get(f"http://127.0.0.1/mcq/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
+                self.mc_query_res = requests.get(f"http://127.0.0.1/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
             except Exception:  # The query server is offline
                 modules.send(group_id, user_id, "Query server is offline! Please notify admin!")
             self.mc_query_result = self.mc_query_res.json()  # Get JSON data
@@ -326,7 +326,7 @@ class PersonalModules:
                 host (str): The IP of the Minecraft server to be queried.
             """
             try:
-                self.mc_query_res = requests.get(f"http://127.0.0.1/mcq/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
+                self.mc_query_res = requests.get(f"http://127.0.0.1/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
             except Exception:  # The query server is offline
                 personal_modules.send(user_id, "Query server is offline! Please notify admin!")
             self.mc_query_result = self.mc_query_res.json()  # Get JSON data
@@ -672,6 +672,6 @@ if __name__ == '__main__':
 
     modules.send_public_message(group_id, "Superior Bot now ONLINE!")  # Inform others that the bot is online
     for user in users:
-        personal_modules.send(user, 'Superior Bot  now ONLINE!')
+        personal_modules.send(user, 'Superior Bot now ONLINE!')
 
     app.run(host='127.0.0.1', port=9000)
