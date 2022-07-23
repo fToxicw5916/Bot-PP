@@ -1,5 +1,4 @@
 go-cqhttp
-config.yml
 data/
 device.json
 logs/
