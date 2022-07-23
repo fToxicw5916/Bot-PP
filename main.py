@@ -1,7 +1,6 @@
 """The main file for Superior Bot.
 """
 # Import needed packages
-from typing import NoReturn  # Doc string
 from flask import Flask, request  # For building a simple server to receiving messages
 import requests  # For sending requests to the bot
 import json  # For managing Minecraft server query response
@@ -12,10 +11,14 @@ import argparse  # Used to get arguments
 app = Flask(__name__)  # Create the Flask APP
 parser = argparse.ArgumentParser(description="Superior Bot manual")  # Create the parser
 
-parser.add_argument('Group_ID', type=int, help='You QQ group ID')  # Add the argument for group ID
+parser.add_argument('Group_ID', type=int, help='Your QQ group ID')  # Group ID
+parser.add_argument('Host', type=str, default='127.0.0.1', help='Your host IP')  # IP for flask server
+parser.add_argument('Port', type=str, default='9000', help='Your host port')  # Port for flask server
 args = parser.parse_args()  # Parse the args
 
 group_id = args.Group_ID  # Get the group ID
+host = args.Host  # IP
+port = args.Port  # Port
 
 
 class Modules:
@@ -674,4 +677,4 @@ if __name__ == '__main__':
     for user in users:
         personal_modules.send(user, 'Superior Bot now ONLINE!')
 
-    app.run(host='127.0.0.1', port=9000)
+    app.run(host=host, port=port)
