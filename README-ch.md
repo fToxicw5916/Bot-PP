@@ -7,6 +7,16 @@ English version: [here](https://github.com/fToxicw5916/Superior-Bot/blob/release
 ## 这是什么？
 Superior Bot是一个可以在QQ内使用的聊天机器人。它支持很多个功能，并且你可以快捷的在自己的电脑上运行。
 
+## 功能
+- 计算器
+- 我的世界服务器基础信息查询
+- Hypixel信息查询
+- Hypixel起床战争信息查询
+- 新闻
+- Sexy pic
+- 必应的每日壁纸
+- 还有更多！
+
 ## 基本使用方法
 首先，你需要Python 3才能运行Superior Bot。你可以在[这里](https://python.org/)下载到它。
 
