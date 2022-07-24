@@ -1,6 +1,6 @@
 go-cqhttp
-config.yml
 data/
+config.yml
 device.json
 logs/
 session.token

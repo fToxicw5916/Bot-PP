@@ -1,32 +1,40 @@
-# Bot++
-The best chat bot ever - Bot++!
+# Superior Bot
+
+English version: [here](https://github.com/fToxicw5916/Superior-Bot/blob/release/README.md)     中文版本：[这里](https://github.com/fToxicw5916/Superior-Bot/blob/release/README-ch.md)
+
+The best chat bot ever - Superior Bot!
 
 ## What is it?
-Bot++ is a bot that can be used easily for QQ. It supports a lot of functions and can be easily set up on your own computer.
+Superior Bot is a bot that can be used easily for QQ. It supports a lot of functions and can be easily set up on your own computer.
 
-## Usage
-### Pre-installation
-First, you will need Python 3 to run Bot++. You can download it [here](https://www.python.org/).
+## Basic-usage
+First, you need Python 3 in order to run Superior Bot. You can download and install it [here](https://python.org/).
 
-Then, you will need Go-CQHttp for Bot++. Go-CQHttp is a application so that the bot can send messages and receive messages from QQ. You can download it [here](https://github.com/Mrs4s/go-cqhttp/releases). I suggest you download the lastest version and the binary file instead of the zip file. **You need to configure Go-CQHttp before use! You can find how to do that [here](https://docs.go-cqhttp.org/guide/#go-cqhttp)**
+Then, you will need Go-CQHttp to support Superior Bot to receive and send messages. You can download it [here](https://docs.go-cqhttp.org/). **You need to configure Go-CQHttp to fit you before use! You can find out how to do that [here](https://docs.go-cqhttp.org/guide/#go-cqhttp)!** I strongly suggest you put the binary file in the Superior Bot's folder. That can save you a lot of trouble.
 
-Then, download Bot++. Just download it's source code by cloning the repo using Git or just download it. Unzip the file before you use!
+At last, you need to download the Superior Bot itself. You can find it at the right side of this page - Release. Unzip it before use.
 
-Next, open your terminal. Use `cd` to get to the directory where Bot++ is. Use
+Then, open up your terminal and use the `cd` command to get to Superior Bot's folder. For example, `cd ~/Downloads/Superior-Bot`. Then, run:
 ```bash
 pip install -r requirements.txt
 ```
-to install the packages.
+to install the required packages.
 
 Now, you are ready to go!
 
-### How can you use it?
-First, boot up Go-CQHttp: (**Configure before use!!!**)
+First, boot up Go-CQHttp. Run:
 ```bash
 sudo ./go-cqhttp
 ```
-Then, You can run Bot++ by using the following command:
+and wait until it is fully boot up.
+
+Then, run:
 ```bash
-python main.py {Your group ID here}
+python main.py {Your target group ID} {Your IP, default 127.0.0.1} {Your port, default 9000}
 ```
-where "{Your group ID here}" should be replaced to the group's ID you want Bot++ to be in.
+to boot up Superior-Bot.
+
+If nothing went wrong, in the target group, you should see a message `Superior-Bot now ONLINE!`. Try to send `/help` into the chat to get some help from Superior Bot!
+
+# Advanced settings
+You should noticed that there is a users.txt file in the Superior-Bot's folder. If you want to tell someone via private chat that the Superior Bot is online, you can put their ID into that file. Then, when Superior Bot boot up, it should send a message to everyone in that file `Superior-Bot now ONLINE!`.
