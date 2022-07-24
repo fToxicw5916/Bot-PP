@@ -15,6 +15,7 @@ Superior Bot is a bot that can be used easily for QQ. It supports a lot of funct
 - Get news
 - Sexy pic
 - Bing's daily wallpaper
+- Economy system
 - And much more with even more coming!
 
 ## Basic-usage
