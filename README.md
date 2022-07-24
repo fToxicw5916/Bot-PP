@@ -1,6 +1,6 @@
 # Superior Bot
 
-English version: [here](https://github.com/fToxicw5916/Superior-Bot/blob/release/README.md)     中文版本：[这里](https://github.com/fToxicw5916/Superior-Bot/blob/release/README-ch.md)
+English version: [here](https://github.com/fToxicw5916/Superior-Bot/blob/master/README.md)     中文版本：[这里](https://github.com/fToxicw5916/Superior-Bot/blob/master/README-ch.md)
 
 The best chat bot ever - Superior Bot!
 
