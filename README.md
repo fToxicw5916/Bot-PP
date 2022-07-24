@@ -7,10 +7,22 @@ The best chat bot ever - Superior Bot!
 ## What is it?
 Superior Bot is a bot that can be used easily for QQ. It supports a lot of functions and can be easily set up on your own computer.
 
+## Functions
+- Calculator
+- Minecraft server basic information query
+- Hypixel basic information
+- Hypixel bedwars basic information
+- Get news
+- Sexy pic
+- Bing's daily wallpaper
+- And much more with even more coming!
+
 ## Basic-usage
 First, you need Python 3 in order to run Superior Bot. You can download and install it [here](https://python.org/).
 
-Then, you will need Go-CQHttp to support Superior Bot to receive and send messages. You can download it [here](https://docs.go-cqhttp.org/). **You need to configure Go-CQHttp to fit you before use! You can find out how to do that [here](https://docs.go-cqhttp.org/guide/#go-cqhttp)!** I strongly suggest you put the binary file in the Superior Bot's folder. That can save you a lot of trouble.
+Then, you will need Go-CQHttp to support Superior Bot to receive and send messages. You can download it [here](https://docs.go-cqhttp.org/). **You need to configure Go-CQHttp to fit you before use! You can find out how to do that [here](https://docs.go-cqhttp.org/guide/#go-cqhttp)!**
+
+You will also need the query server in order for Minecraft server query to work. First, you will need the [server](https://www.xp.cn/download.html). After installation, start the server. Then, find the server's folder, create a new folder in it called `mcp`, then put [these](https://github.com/MCNewsTools/PHP-Minecraft-Query-API) files in the `mcp` folder. Now you are ready to go!
 
 At last, you need to download the Superior Bot itself. You can find it at the right side of this page - Release. Unzip it before use.
 
