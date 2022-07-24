@@ -10,7 +10,9 @@ Superior Bot是一个可以在QQ内使用的聊天机器人。它支持很多个
 ## 基本使用方法
 首先，你需要Python 3才能运行Superior Bot。你可以在[这里](https://python.org/)下载到它。
 
-然后，你需要Go-CQHttp才能让Superior Bot发送/接受消息。你可以在[这里](https://docs.go-cqhttp.org/)下载到它。**注意！你需要在运行Go-CQHttp之前配置它！你可以在[这里](https://docs.go-cqhttp.org/guide/#go-cqhttp)找到如何做到这一点。**我强烈建议你把Go-CQHttp的二进制文件放到Superior Bot的文件夹里，这样可以给你节省不少时间。
+然后，你需要Go-CQHttp才能让Superior Bot发送/接受消息。你可以在[这里](https://docs.go-cqhttp.org/)下载到它。**注意！你需要在运行Go-CQHttp之前配置它！你可以在[这里](https://docs.go-cqhttp.org/guide/#go-cqhttp)找到如何做到这一点。**
+
+我的世界服务器查询功能需要一个查询服务器来工作。首先，下载并安装[小皮面板](https://www.xp.cn/download.html)。启动服务器。找到服务器的运行目录，在里面新建一个叫做`mcp`的文件夹，然后把[这些](https://github.com/MCNewsTools/PHP-Minecraft-Query-API)文件放到`mcp`文件夹里。
 
 然后，你需要下载Superior Bot本身。你可以在这个页面的右边 - Release里面找到它。请在使用前解压。
 
