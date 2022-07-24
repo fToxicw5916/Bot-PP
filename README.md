@@ -32,7 +32,7 @@ Then, run:
 ```bash
 python main.py {Your target group ID} {Your IP, default 127.0.0.1} {Your port, default 9000}
 ```
-to boot up Superior-Bot.
+to boot up Superior-Bot. **Your IP and port should fit your settings in Go-CQHttp!**
 
 If nothing went wrong, in the target group, you should see a message `Superior-Bot now ONLINE!`. Try to send `/help` into the chat to get some help from Superior Bot!
 
