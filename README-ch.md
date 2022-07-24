@@ -32,7 +32,7 @@ sudo ./go-cqhttp
 ```bash
 python main.py {你的QQ群号} {你的IP，默认127.0.0.1} {你的端口，默认9000}
 ```
-来启动Superior Bot。
+来启动Superior Bot。**你的IP和端口应该和Go-CQHttp中你的配置相符！**
 
 如果没有出现任何问题，你的群内，应该会收到一条消息：`Superior Bot now ONLINE!` 在聊天内发送`/help`来获取帮助。
 
