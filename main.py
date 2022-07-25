@@ -19,6 +19,7 @@ args = parser.parse_args()  # Parse the args
 group_id = args.Group_ID  # Get the group ID
 host = args.Host  # IP
 port = args.Port  # Port
+bot = True  # If the bot if on or not
 
 
 class Modules:
@@ -241,7 +242,14 @@ class Modules:
                 self.get_current_economy_stats = json.load(f)  # Get the coins this user have
                 f.close()
 
-            self.get_current_coins = self.get_current_economy_stats[uid]['coins']  # Get your coins
+            try:
+                self.get_current_coins = self.get_current_economy_stats[uid]['coins']  # Get your coins
+            except KeyError:  # No profile yet?
+                self.get_current_economy_stats[uid]['coins'] = 0  # Create new profile
+                with open('storage/economy.json', 'w') as f:
+                    json.dump(self.get_current_economy_stats, f)
+                    f.close()
+                modules.send(group_id, uid, 'Your current economy status:\nCoins: 0')
 
             modules.send(group_id, uid, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
 
@@ -259,11 +267,14 @@ class Modules:
                 self.work_economy_stats = json.load(f)
                 f.close()
 
-            coins = self.work_economy_stats[uid]['coins']  # Get your coins
-            coins = int(coins)  # Convert coins to int so that we can add the income
-            coins += self.work_income  # Change current status
-            coins = str(coins)  # Convert coins to str so that we can dump them
-            self.work_economy_stats[uid]['coins'] = coins  # Save it to the dict
+            try:
+                coins = self.work_economy_stats[uid]['coins']  # Get your coins
+                coins = int(coins)  # Convert coins to int so that we can add the income
+                coins += self.work_income  # Change current status
+                coins = str(coins)  # Convert coins to str so that we can dump them
+                self.work_economy_stats[uid]['coins'] = coins  # Save it to the dict
+            except KeyError:
+                self.work_economy_stats[uid]['coins'] = 0 + self.work_income
 
             with open('storage/economy.json', 'w') as f:  # Dump the current status
                 json.dump(self.work_economy_stats, f)
@@ -492,7 +503,14 @@ class PersonalModules:
                 self.get_current_economy_stats = json.load(f)  # Get the coins this user have
                 f.close()
 
-            self.get_current_coins = self.get_current_economy_stats[uid]['coins']  # Get your coins
+            try:
+                self.get_current_coins = self.get_current_economy_stats[uid]['coins']  # Get your coins
+            except KeyError:  # No profile yet?
+                self.get_current_economy_stats[uid]['coins'] = 0  # Create new profile
+                with open('storage/economy.json', 'w') as f:
+                    f.write(self.get_current_economy_stats)
+                    f.close()
+                personal_modules.send(uid, 'Your current economy status:\nCoins: 0')
 
             personal_modules.send(uid, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
 
@@ -510,11 +528,14 @@ class PersonalModules:
                 self.work_economy_stats = json.load(f)
                 f.close()
 
-            coins = self.work_economy_stats[uid]['coins']  # Get your coins
-            coins = int(coins)  # Convert coins to int so that we can add the income
-            coins += self.work_income  # Change current status
-            coins = str(coins)  # Convert coins to str so that we can dump them
-            self.work_economy_stats[uid]['coins'] = coins  # Save it to the dict
+            try:
+                coins = self.work_economy_stats[uid]['coins']  # Get your coins
+                coins = int(coins)  # Convert coins to int so that we can add the income
+                coins += self.work_income  # Change current status
+                coins = str(coins)  # Convert coins to str so that we can dump them
+                self.work_economy_stats[uid]['coins'] = coins  # Save it to the dict
+            except KeyError:
+                self.work_economy_stats[uid]['coins'] = 0 + self.work_income
 
             with open('storage/economy.json', 'w') as f:  # Dump the current status
                 json.dump(self.work_economy_stats, f)
@@ -551,25 +572,25 @@ def main(msg: str, uid: str):
         modules.send_public_message(group_id, '?')
 
     # Minecraft
-    elif msg[0:6] == '/query':  # Minecraft server detect
-        minecraft.mc_query(uid, msg[7:])
-    elif msg[0:9] == '/hyp-info':  # Hypixel basic info
-        minecraft.hyp_basic_info(uid, msg[10:])
-    elif msg[0:3] == '/bw':  # Hypixel bedwars info
-        minecraft.hyp_bedwars_info(uid, msg[4:])
+    elif msg[0:5] == 'query':  # Minecraft server detect
+        minecraft.mc_query(uid, msg[6:])
+    elif msg[0:3] == 'hyp':  # Hypixel basic info
+        minecraft.hyp_basic_info(uid, msg[4:])
+    elif msg[0:2] == 'bw':  # Hypixel bedwars info
+        minecraft.hyp_bedwars_info(uid, msg[3:])
 
     # Random images
-    elif msg == '/sexypic':
+    elif msg == 'sexypic':
         modules.sexypic(uid)
-    elif msg == '/wotd':
+    elif msg == 'wotd':
         modules.wotd()
 
     # Calculator
-    elif msg[0:5] == '/calc':
-        modules.calc(msg[6:])
+    elif msg[0:4] == 'calc':
+        modules.calc(msg[5:])
 
     # News
-    elif msg == '/news':
+    elif msg == 'news':
         modules.get_news()
 
     # Times keywords
@@ -584,7 +605,7 @@ def main(msg: str, uid: str):
         economy.work(uid)
 
     # Send help
-    elif msg == '/help':
+    elif msg == 'help':
         modules.help_()
 
 
@@ -603,25 +624,25 @@ def personal_main(msg: str, uid: str):
         personal_modules.send(uid, '?')
 
     # Minecraft
-    elif msg[0:6] == '/query':  # Minecraft server detect
-        personal_minecraft.mc_query(uid, msg[7:])
-    elif msg[0:9] == '/hyp-info':  # Hypixel basic info
-        personal_minecraft.hyp_basic_info(uid, msg[10:])
-    elif msg[0:3] == '/bw':  # Hypixel bedwars info
-        personal_minecraft.hyp_bedwars_info(uid, msg[4:])
+    elif msg[0:5] == 'query':  # Minecraft server detect
+        personal_minecraft.mc_query(uid, msg[6:])
+    elif msg[0:3] == 'hyp':  # Hypixel basic info
+        personal_minecraft.hyp_basic_info(uid, msg[4:])
+    elif msg[0:2] == 'bw':  # Hypixel bedwars info
+        personal_minecraft.hyp_bedwars_info(uid, msg[3:])
 
     # Random images
-    elif msg == '/sexypic':
+    elif msg == 'sexypic':
         personal_modules.sexypic(uid)
-    elif msg == '/wotd':
+    elif msg == 'wotd':
         personal_modules.wotd(uid)
 
     # Calculator
-    elif msg[0:5] == '/calc':
-        personal_modules.calc(uid, msg[6:])
+    elif msg[0:4] == 'calc':
+        personal_modules.calc(uid, msg[5:])
 
     # News
-    elif msg == '/news':
+    elif msg == 'news':
         personal_modules.get_news(uid)
 
     # Times keywords
@@ -636,7 +657,7 @@ def personal_main(msg: str, uid: str):
         personal_economy.work(uid)
 
     # Send help
-    elif msg == '/help':
+    elif msg == 'help':
         personal_modules.help_(uid)
 
 
@@ -644,13 +665,47 @@ def personal_main(msg: str, uid: str):
 def server():
     """Get data of a receive message.
     """
+    global bot
+
     data = request.get_json()  #  Get JSON data
     message = data['raw_message']  #  Get the message
     user_id = data['user_id']  # The user id of the sender
     if data['message_type'] == 'group':  # Only respond to group messages!
-        main(message, user_id)  # Send to the get_keyword function to extract the keyword
+        if bot:
+            main(message, user_id)  # Send to the get_keyword function to extract the keyword
+        
+        if message == 'bot':
+            if bot:
+                modules.send_public_message(group_id, 'Superior Bot now ON.')
+            else:
+                modules.send_public_message(group_id, 'Superior Bot now OFF.')
+        elif message == 'bot on':
+            bot = True
+            modules.send_public_message(group_id, 'Superior Bot now ON.')
+        elif message == 'bot off':
+            bot = False
+            modules.send_public_message(group_id, 'Superior Bot now OFF.')
     elif data['message_type'] == 'private':
-        personal_main(message, user_id)
+        if bot:
+            personal_main(message, user_id)
+
+        if message == 'bot':
+            if bot:
+                personal_modules.send(user_id, 'Superior Bot now ON.')
+            else:
+                personal_modules.send(user_id, 'Superior Bot now OFF.')
+        elif message == 'bot on':
+            if user_id == "2812862107":
+                bot = True
+                personal_modules.send(user_id, 'Superior Bot now ON.')
+            else:
+                personal_modules.send(user_id, 'Unauthorized.')
+        elif message == 'bot off':
+            if user_id == "2812862107":
+                bot = False
+                personal_modules.send(user_id, 'Superior Bot now OFF.')
+            else:
+                personal_modules.send(user_id, 'Unauthorized.')
 
 
 if __name__ == '__main__':
