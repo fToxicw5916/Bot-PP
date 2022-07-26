@@ -69,8 +69,8 @@ class Modules:
             self.calc_result = eval(equation)  # Get the result
         except Exception as e:  # Example: a/0
             self.send(group_id, user_id, e)
-        else:  # Nothing wrong, send the results and return them
-            self.send(group_id, user_id, self.calc_result)
+        # Nothing wrong, send the results and return them
+        self.send(group_id, user_id, self.calc_result)
 
     class Minecraft:
         """Minecraft modules for Superior Bot.
@@ -131,7 +131,7 @@ class Modules:
                 self.hyp_basic_info_rank = self.hyp_basic_info_result['player']['newPackageRank']
                 self.hyp_basic_info_most_recent_game = self.hyp_basic_info_result['player']['mostRecentGameType']
             except KeyError:
-                modules.send(group_id, uid, 'Something is wrong about your Hypixel profile. Please notice admin!')
+                self.hyp_basic_info_most_recent_game = 'SKYBLOCK'
 
             modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
 
@@ -152,12 +152,15 @@ class Modules:
                 self.hyp_bedwars_info_games_played = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['games_played_bedwars']
                 self.hyp_bedwars_info_coins = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['coins']
                 self.hyp_bedwars_info_item_purchased = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['_items_purchased_bedwars']
+                
                 self.hyp_bedwars_info_kills = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['kills_bedwars']
                 self.hyp_bedwars_info_final_kills = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_kills_bedwars']
                 self.hyp_bedwars_info_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['deaths_bedwars']
                 self.hyp_bedwars_info_final_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_deaths_bedwars']
+                
                 self.hyp_bedwars_info_beds_broken = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['beds_broken_bedwars']
                 self.hyp_bedwars_info_beds_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['beds_lost_bedwars']
+                
                 self.hyp_bedwars_info_games_won = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['wins_bedwars']
                 self.hyp_bedwars_info_winstreak = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['winstreak']
                 self.hyp_bedwars_info_games_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['losses_bedwars']
@@ -165,6 +168,62 @@ class Modules:
                 modules.send(group_id, user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
             modules.send(group_id, user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
+
+        def hyp_skyblock_info(self, uid: str, username: str):
+            """Get username's skyblock info and sends it to Group ID while mentioning uid.
+
+            Args:
+                uid (str): The user's ID you want to mention.
+                username (str): The player's username, which will be feed into get_uuid to get the player's UUID.
+            """
+            self.get_uuid(username)  # Get the player's UUID
+            # Get the player's profile ID
+            self.hyp_skyblock_info_profile_res = requests.get(f'https://api.hypixel.net/skyblock/profile?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
+            self.hyp_skyblock_info_profile_result = self.hyp_skyblock_info_profile_res.json()
+            # Get the player's skyblock info
+            self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")
+            self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
+
+            # No profile?
+            try:
+                self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profile']['profile_id']
+            except KeyError:
+                modules.send(group_id, uid, "You don't have an Skyblock profile yet!")
+
+            # Data
+            self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
+    
+            self.hyp_skyblock_info_armour_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][0]['display_name']
+            self.hyp_skyblock_info_armour_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][1]['display_name']
+            self.hyp_skyblock_info_armour_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][2]['display_name']
+            self.hyp_skyblock_info_armour_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][3]['display_name']
+            self.hyp_skyblock_info_armour_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour_set']
+
+            self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['collected']
+            self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['total']
+            
+            self.hyp_skyblock_info_taming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['taming']['level']
+            self.hyp_skyblock_info_farming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['farming']['level']
+            self.hyp_skyblock_info_mining_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['mining']['level']
+            self.hyp_skyblock_info_combat_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['combat']['level']
+            self.hyp_skyblock_info_foraging_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['foraging']['level']
+            self.hyp_skyblock_info_fishing_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['fishing']['level']
+            self.hyp_skyblock_info_enchanting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['enchanting']['level']
+            self.hyp_skyblock_info_alchemy_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['alchemy']['level']
+            self.hyp_skyblock_info_carpentry_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['carpentry']['level']
+            self.hyp_skyblock_info_runecrafting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['runecrafting']['level']
+            self.hyp_skyblock_info_social_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['social']['level']
+            self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['average_level']
+            self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)
+            
+            # TODO: Slayer
+            # TODO: Pets
+            # TODO: Purse
+            # TODO: Current area
+            
+            # TODO: Levels
+            # Send the result
+            modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmour:\nHelmet: {self.hyp_skyblock_info_armour_head}\nChestplate: {self.hyp_skyblock_info_armour_chestplate}\nLeggings: {self.hyp_skyblock_info_armour_leggings}\nBoots: {self.hyp_skyblock_info_armour_boots}")
 
     def sexypic(self, user_id: str):
         """Fetches 5 sexy pics from Pixiv and them sends to result via private chat to user_id.
@@ -383,7 +442,7 @@ class PersonalModules:
                 self.hyp_basic_info_rank = self.hyp_basic_info_result['player']['newPackageRank']
                 self.hyp_basic_info_most_recent_game = self.hyp_basic_info_result['player']['mostRecentGameType']
             except KeyError:
-                personal_modules.send(uid, 'Something is wrong with your Hypixel profile. Please notice admin!')
+                self.hyp_basic_info_most_recent_game = 'SKYBLOCK'
 
             personal_modules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
 
@@ -404,12 +463,15 @@ class PersonalModules:
                 self.hyp_bedwars_info_games_played = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['games_played_bedwars']
                 self.hyp_bedwars_info_coins = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['coins']
                 self.hyp_bedwars_info_item_purchased = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['_items_purchased_bedwars']
+                
                 self.hyp_bedwars_info_kills = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['kills_bedwars']
                 self.hyp_bedwars_info_final_kills = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_kills_bedwars']
                 self.hyp_bedwars_info_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['deaths_bedwars']
                 self.hyp_bedwars_info_final_deaths = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['final_deaths_bedwars']
+                
                 self.hyp_bedwars_info_beds_broken = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['beds_broken_bedwars']
                 self.hyp_bedwars_info_beds_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['beds_lost_bedwars']
+                
                 self.hyp_bedwars_info_games_won = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['wins_bedwars']
                 self.hyp_bedwars_info_winstreak = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['winstreak']
                 self.hyp_bedwars_info_games_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['losses_bedwars']
@@ -417,6 +479,63 @@ class PersonalModules:
                 personal_modules.send(user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
             personal_modules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
+
+        def hyp_skyblock_info(self, uid: str, username: str):
+            """Get username's skyblock info and sends it to Group ID while mentioning uid.
+
+            Args:
+                uid (str): The user's ID you want to mention.
+                username (str): The player's username, which will be feed into get_uuid to get the player's UUID.
+            """
+            self.get_uuid(username)  # Get the player's UUID
+            # Get the player's profile ID
+            self.hyp_skyblock_info_profile_res = requests.get(f'https://api.hypixel.net/skyblock/profile?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
+            self.hyp_skyblock_info_profile_result = self.hyp_skyblock_info_profile_res.json()
+            # Get the player's skyblock info
+            self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")
+            self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
+
+            # No profile?
+            try:
+                self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profile']['profile_id']
+            except KeyError:
+                personal_modules.send(uid, "You don't have an Skyblock profile yet!")
+
+            # Data
+            self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
+    
+            self.hyp_skyblock_info_armour_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][0]['display_name']
+            self.hyp_skyblock_info_armour_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][1]['display_name']
+            self.hyp_skyblock_info_armour_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][2]['display_name']
+            self.hyp_skyblock_info_armour_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][3]['display_name']
+            self.hyp_skyblock_info_armour_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour_set']
+
+            self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['collected']
+            self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['total']
+            
+            self.hyp_skyblock_info_taming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['taming']['level']
+            self.hyp_skyblock_info_farming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['farming']['level']
+            self.hyp_skyblock_info_mining_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['mining']['level']
+            self.hyp_skyblock_info_combat_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['combat']['level']
+            self.hyp_skyblock_info_foraging_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['foraging']['level']
+            self.hyp_skyblock_info_fishing_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['fishing']['level']
+            self.hyp_skyblock_info_enchanting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['enchanting']['level']
+            self.hyp_skyblock_info_alchemy_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['alchemy']['level']
+            self.hyp_skyblock_info_carpentry_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['carpentry']['level']
+            self.hyp_skyblock_info_runecrafting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['runecrafting']['level']
+            self.hyp_skyblock_info_social_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['social']['level']
+            self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['average_level']
+            self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)
+            
+            # TODO: Slayer
+            # TODO: Pets
+            # TODO: Purse
+            # TODO: Current area
+            
+            # TODO: Levels
+            # Send the result
+            personal_modules.send(uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmour:\nHelmet: {self.hyp_skyblock_info_armour_head}\nChestplate: {self.hyp_skyblock_info_armour_chestplate}\nLeggings: {self.hyp_skyblock_info_armour_leggings}\nBoots: {self.hyp_skyblock_info_armour_boots}")
+
 
     def sexypic(self, user_id: str):
         """Get 5 random sexy pic from Pixiv and then sends it to user_id
@@ -567,17 +686,15 @@ def main(msg: str, uid: str):
     msg = msg.lower()
     uid = str(uid)
 
-    # Respond so that we know the bot is online
-    if msg == 'sb':
-        modules.send_public_message(group_id, '?')
-
     # Minecraft
-    elif msg[0:5] == 'query':  # Minecraft server detect
+    if msg[0:5] == 'query':  # Minecraft server detect
         minecraft.mc_query(uid, msg[6:])
     elif msg[0:3] == 'hyp':  # Hypixel basic info
         minecraft.hyp_basic_info(uid, msg[4:])
     elif msg[0:2] == 'bw':  # Hypixel bedwars info
         minecraft.hyp_bedwars_info(uid, msg[3:])
+    elif msg[0:2] == 'sb':  # Hypixel skyblock info
+        minecraft.hyp_skyblock_info(uid, msg[3:])
 
     # Random images
     elif msg == 'sexypic':
@@ -619,17 +736,15 @@ def personal_main(msg: str, uid: str):
     msg = msg.lower()
     uid = str(uid)
 
-    # Respond so that we know the bot is online
-    if msg == 'sb':
-        personal_modules.send(uid, '?')
-
     # Minecraft
-    elif msg[0:5] == 'query':  # Minecraft server detect
+    if msg[0:5] == 'query':  # Minecraft server detect
         personal_minecraft.mc_query(uid, msg[6:])
     elif msg[0:3] == 'hyp':  # Hypixel basic info
         personal_minecraft.hyp_basic_info(uid, msg[4:])
     elif msg[0:2] == 'bw':  # Hypixel bedwars info
         personal_minecraft.hyp_bedwars_info(uid, msg[3:])
+    elif msg[0:2] == 'sb':  # Hypixel skyblock info
+        personal_minecraft.hyp_skyblock_info(uid, msg[3:])
 
     # Random images
     elif msg == 'sexypic':
@@ -675,37 +790,41 @@ def server():
             main(message, user_id)  # Send to the get_keyword function to extract the keyword
         
         if message == 'bot':
-            if bot:
-                modules.send_public_message(group_id, 'Superior Bot now ON.')
-            else:
-                modules.send_public_message(group_id, 'Superior Bot now OFF.')
+            modules.send_public_message(group_id, '?')
         elif message == 'bot on':
             bot = True
             modules.send_public_message(group_id, 'Superior Bot now ON.')
         elif message == 'bot off':
             bot = False
             modules.send_public_message(group_id, 'Superior Bot now OFF.')
+        elif message == 'bot stats':
+            if bot:
+                modules.send_public_message(group_id, 'Superior Bot now ON.')
+            else:
+                modules.send_public_message(group_id, 'Superior Bot now OFF.')
     elif data['message_type'] == 'private':
         if bot:
             personal_main(message, user_id)
 
         if message == 'bot':
-            if bot:
-                personal_modules.send(user_id, 'Superior Bot now ON.')
-            else:
-                personal_modules.send(user_id, 'Superior Bot now OFF.')
+            personal_modules.send(user_id, '?')
         elif message == 'bot on':
-            if user_id == "2812862107":
+            if user_id == 2812862107:
                 bot = True
                 personal_modules.send(user_id, 'Superior Bot now ON.')
             else:
                 personal_modules.send(user_id, 'Unauthorized.')
         elif message == 'bot off':
-            if user_id == "2812862107":
+            if user_id == 2812862107:
                 bot = False
                 personal_modules.send(user_id, 'Superior Bot now OFF.')
             else:
                 personal_modules.send(user_id, 'Unauthorized.')
+        elif message == 'bot stats':
+            if bot:
+                personal_modules.send(user_id, 'Superior Bot now ON.')
+            else:
+                personal_modules.send(user_id, 'Superior Bot now OFF.')
 
 
 if __name__ == '__main__':
