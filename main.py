@@ -178,26 +178,25 @@ class Modules:
             """
             self.get_uuid(username)  # Get the player's UUID
             # Get the player's profile ID
-            self.hyp_skyblock_info_profile_res = requests.get(f'https://api.hypixel.net/skyblock/profile?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
+            self.hyp_skyblock_info_profile_res = requests.get(f'https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
             self.hyp_skyblock_info_profile_result = self.hyp_skyblock_info_profile_res.json()
             # Get the player's skyblock info
             self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")
             self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
 
-            # No profile?
             try:
-                self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profile']['profile_id']
-            except KeyError:
+                self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profiles'][0]['profile_id']
+            except KeyError:  # No profile?
                 modules.send(group_id, uid, "You don't have an Skyblock profile yet!")
 
             # Data
             self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
     
-            self.hyp_skyblock_info_armour_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][0]['display_name']
-            self.hyp_skyblock_info_armour_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][1]['display_name']
-            self.hyp_skyblock_info_armour_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][2]['display_name']
-            self.hyp_skyblock_info_armour_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][3]['display_name']
-            self.hyp_skyblock_info_armour_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour_set']
+            self.hyp_skyblock_info_armor_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][0]['display_name']
+            self.hyp_skyblock_info_armor_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][1]['display_name']
+            self.hyp_skyblock_info_armor_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][2]['display_name']
+            self.hyp_skyblock_info_armor_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][3]['display_name']
+            self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor_set']
 
             self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['collected']
             self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['total']
@@ -223,7 +222,7 @@ class Modules:
             
             # TODO: Levels
             # Send the result
-            modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmour:\nHelmet: {self.hyp_skyblock_info_armour_head}\nChestplate: {self.hyp_skyblock_info_armour_chestplate}\nLeggings: {self.hyp_skyblock_info_armour_leggings}\nBoots: {self.hyp_skyblock_info_armour_boots}")
+            modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
 
     def sexypic(self, user_id: str):
         """Fetches 5 sexy pics from Pixiv and them sends to result via private chat to user_id.
@@ -489,26 +488,25 @@ class PersonalModules:
             """
             self.get_uuid(username)  # Get the player's UUID
             # Get the player's profile ID
-            self.hyp_skyblock_info_profile_res = requests.get(f'https://api.hypixel.net/skyblock/profile?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
+            self.hyp_skyblock_info_profile_res = requests.get(f'https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
             self.hyp_skyblock_info_profile_result = self.hyp_skyblock_info_profile_res.json()
             # Get the player's skyblock info
             self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")
             self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
 
-            # No profile?
             try:
-                self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profile']['profile_id']
-            except KeyError:
+                self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profiles'][0]['profile_id']
+            except KeyError:  # No profile?
                 personal_modules.send(uid, "You don't have an Skyblock profile yet!")
 
             # Data
             self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
     
-            self.hyp_skyblock_info_armour_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][0]['display_name']
-            self.hyp_skyblock_info_armour_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][1]['display_name']
-            self.hyp_skyblock_info_armour_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][2]['display_name']
-            self.hyp_skyblock_info_armour_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour'][3]['display_name']
-            self.hyp_skyblock_info_armour_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armour_set']
+            self.hyp_skyblock_info_armor_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][0]['display_name']
+            self.hyp_skyblock_info_armor_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][1]['display_name']
+            self.hyp_skyblock_info_armor_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][2]['display_name']
+            self.hyp_skyblock_info_armor_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][3]['display_name']
+            self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor_set']
 
             self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['collected']
             self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['total']
@@ -534,7 +532,7 @@ class PersonalModules:
             
             # TODO: Levels
             # Send the result
-            personal_modules.send(uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmour:\nHelmet: {self.hyp_skyblock_info_armour_head}\nChestplate: {self.hyp_skyblock_info_armour_chestplate}\nLeggings: {self.hyp_skyblock_info_armour_leggings}\nBoots: {self.hyp_skyblock_info_armour_boots}")
+            personal_modules.send(uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmour:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
 
 
     def sexypic(self, user_id: str):
