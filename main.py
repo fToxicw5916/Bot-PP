@@ -5,7 +5,7 @@ from flask import Flask, request  # For building a simple server to receiving me
 import argparse  # Used to get arguments
 
 # Import module files
-from modules.modules_english import *
+from modules.modules_english import *  # English module
 
 app = Flask(__name__)  # Create the Flask APP
 parser = argparse.ArgumentParser(description="Superior Bot manual")  # Create the parser
@@ -41,18 +41,13 @@ def main(msg: str, uid: str):
     elif msg[0:2] == 'sb':  # Hypixel skyblock info
         minecraft.hyp_skyblock_info(group_id, uid, msg[3:])
 
-    # Random images
-    elif msg == 'sexypic':
-        modules.sexypic(group_id, uid)
-    elif msg == 'wotd':
+    elif msg == 'wotd':  # Wallpaper
         modules.wotd(group_id)
 
-    # Calculator
-    elif msg[0:4] == 'calc':
+    elif msg[0:4] == 'calc':  # Calculator
         modules.calc(group_id, msg[5:])
 
-    # News
-    elif msg == 'news':
+    elif msg == 'news':  # News
         modules.get_news(group_id)
 
     # Times keywords
@@ -66,8 +61,7 @@ def main(msg: str, uid: str):
     elif msg == '^work':  # Get money
         economy.work(group_id, uid)
 
-    # Send help
-    elif msg == 'help':
+    elif msg == 'help':  # Help
         modules.help_(group_id)
 
 
@@ -91,18 +85,15 @@ def personal_main(msg: str, uid: str):
     elif msg[0:2] == 'sb':  # Hypixel skyblock info
         personal_minecraft.hyp_skyblock_info(uid, msg[3:])
 
-    # Random images
-    elif msg == 'sexypic':
+    elif msg == 'sexypic':  # Random sexypic
         personal_modules.sexypic(uid)
-    elif msg == 'wotd':
+    elif msg == 'wotd':  # Wallpaper
         personal_modules.wotd(uid)
 
-    # Calculator
-    elif msg[0:4] == 'calc':
+    elif msg[0:4] == 'calc':  # Calculator
         personal_modules.calc(uid, msg[5:])
 
-    # News
-    elif msg == 'news':
+    elif msg == 'news':  # News
         personal_modules.get_news(uid)
 
     # Times keywords
@@ -116,8 +107,7 @@ def personal_main(msg: str, uid: str):
     elif msg == '^work':  # Get money
         personal_economy.work(uid)
 
-    # Send help
-    elif msg == 'help':
+    elif msg == 'help':  # Help
         personal_modules.help_(uid)
 
 

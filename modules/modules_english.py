@@ -32,15 +32,6 @@ class Modules:
         """
         requests.get(f"http://127.0.0.1:5700/send_group_msg?group_id={group_id}&message={msg}")  # Do the request to send the message
 
-    def send_to(self, user_id: str, msg: str):
-        """Sends a private msg to user_id.
-
-        Args:
-            user_id (str): The user's ID you want to send msg to.
-            msg (str): The message you want to send.
-        """
-        requests.get(f"http://127.0.0.1:5700/send_private_msg?user_id={str(user_id)}&message={msg}")  # Do the request to send the message
-
     def calc(self, group_id: str, user_id: str, equation: str):
         """Calculates equation using eval(), and then sends the result to group_id while mentioning user_id.
 
@@ -172,7 +163,7 @@ class Modules:
             self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")
             self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
 
-            for i in range(0, 4):
+            for i in range(0, 2):
                 try:
                     self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profiles'][i]['profile_id']
                 except KeyError:  # No profile?
@@ -212,26 +203,6 @@ class Modules:
                 # TODO: Fairy souls & Levels
                 # Send the result
                 Modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
-
-    def sexypic(self, user_id: str):
-        """Fetches 5 sexy pics from Pixiv and them sends to result via private chat to user_id.
-
-        Args:
-            user_id (str): The user's ID you want to send the pics to.
-        """
-        self.random_sexy_res = requests.get(self.random_sexy_api)  # Get raw data from API
-        self.random_sexy_result = self.random_sexy_res.json()  # Convert raw data into JSON data
-
-        # Get data
-        self.random_sexy_painter = self.random_sexy_result['data'][0]['author']
-        self.random_sexy_pid = self.random_sexy_result['data'][0]['pid']
-        self.random_sexy_title = self.random_sexy_result['data'][0]['title']
-        self.random_sexy_img_url = self.random_sexy_result['data'][0]['urls']['original']
-        self.random_sexy_file_type = self.random_sexy_result['data'][0]['ext']
-
-        # Send to the user
-        self.send_to(user_id, f'[CQ:image,file={self.random_sexy_img_url}]')  # Send image
-        self.send_to(user_id, f'Author: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send description
 
     def wotd(self, group_id: str):
         """Sends Bing's wallpaper to group_id without mentioning people.
@@ -351,7 +322,7 @@ class Modules:
         Args:
             group_id (str): The group's ID you want to send the result to.
         """
-        self.send_public_message(group_id, "--- Keywords ---\n\nsb {Just a command to check whether the bot is online or not}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nsexypic {Get a pic from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send_public_message(group_id, "--- Keywords ---\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 class PersonalModules:
@@ -674,4 +645,4 @@ class PersonalModules:
         Args:
             uid (str): The user's ID you want to send the help message.
         """
-        self.send(uid, "--- Keywords ---\n\nsb {Just a command to check whether the bot is online or not}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nsexypic {Get a pic from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send(uid, "--- Keywords ---\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nsexypic {Get a pic from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
