@@ -5,3 +5,4 @@ device.json
 logs/
 session.token
 .DS_Store
+modules/__pycache__/
