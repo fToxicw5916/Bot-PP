@@ -519,15 +519,16 @@ class PersonalModules:
         self.random_sexy_result = self.random_sexy_res.json()  # Convert raw data into JSON data
 
         # Get data
-        self.random_sexy_painter = self.random_sexy_result['data'][0]['author']
-        self.random_sexy_pid = self.random_sexy_result['data'][0]['pid']
-        self.random_sexy_title = self.random_sexy_result['data'][0]['title']
-        self.random_sexy_img_url = self.random_sexy_result['data'][0]['urls']['original']
-        self.random_sexy_file_type = self.random_sexy_result['data'][0]['ext']
+        for i in range(0, 4):
+            self.random_sexy_painter = self.random_sexy_result['data'][i]['author']
+            self.random_sexy_pid = self.random_sexy_result['data'][i]['pid']
+            self.random_sexy_title = self.random_sexy_result['data'][i]['title']
+            self.random_sexy_img_url = self.random_sexy_result['data'][i]['urls']['original']
+            self.random_sexy_file_type = self.random_sexy_result['data'][i]['ext']
 
-        # Send to the user
-        self.send(user_id, f'[CQ:image,file={self.random_sexy_img_url}]')  # Send image
-        self.send(user_id, f'Author: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send description
+            # Send to the user
+            self.send(user_id, f'[CQ:image,file={self.random_sexy_img_url}]')  # Send image
+            self.send(user_id, f'Author: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send description
 
     def wotd(self, uid: str):
         """Get Bing's wallpaper and then sends it to uid.
