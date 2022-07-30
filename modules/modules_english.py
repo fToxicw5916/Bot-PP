@@ -266,7 +266,7 @@ class Modules:
             """
             uid = str(uid)  # Convert UID from int to str
 
-            with open('../storage/economy.json', 'r') as f:  # Open storage file and load the data
+            with open('/Users/wangyinuo/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
                 self.get_current_economy_stats = json.load(f)  # Get the coins this user have
                 f.close()
 
@@ -274,7 +274,7 @@ class Modules:
                 self.get_current_coins = self.get_current_economy_stats[uid]['coins']  # Get your coins
             except KeyError:  # No profile yet?
                 self.get_current_economy_stats[uid]['coins'] = 0  # Create new profile
-                with open('../storage/economy.json', 'w') as f:
+                with open('/Users/wangyinuo/Documents/Superior-Bot/storage/economy.json', 'w') as f:
                     json.dump(self.get_current_economy_stats, f)
                     f.close()
                 modules.send(group_id, uid, 'Your current economy status:\nCoins: 0')
@@ -292,7 +292,7 @@ class Modules:
 
             self.work_income = random.randint(-500, 1000)  # Random income
 
-            with open('~/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
+            with open('/Users/wangyinuo/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
                 self.work_economy_stats = json.load(f)
                 f.close()
 
@@ -305,7 +305,7 @@ class Modules:
             except KeyError:
                 self.work_economy_stats[uid]['coins'] = 0 + self.work_income
 
-            with open('~/Documents/Superior-Bot/storage/economy.json', 'w') as f:  # Dump the current status
+            with open('/Users/wangyinuo/Documents/Superior-Bot/storage/economy.json', 'w') as f:  # Dump the current status
                 json.dump(self.work_economy_stats, f)
                 f.close()
 
@@ -590,7 +590,7 @@ class PersonalModules:
             """
             uid = str(uid)  # Convert UID from int to str
 
-            with open('~/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
+            with open('/Users/wangyinuo/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
                 self.get_current_economy_stats = json.load(f)  # Get the coins this user have
                 f.close()
 
@@ -598,7 +598,7 @@ class PersonalModules:
                 self.get_current_coins = self.get_current_economy_stats[uid]['coins']  # Get your coins
             except KeyError:  # No profile yet?
                 self.get_current_economy_stats[uid]['coins'] = 0  # Create new profile
-                with open('~/Documents/Superior-Bot/storage/economy.json', 'w') as f:
+                with open('/Users/wangyinuo/Documents/Superior-Bot/storage/economy.json', 'w') as f:
                     f.write(self.get_current_economy_stats)
                     f.close()
                 personal_modules.send(uid, 'Your current economy status:\nCoins: 0')
@@ -615,7 +615,7 @@ class PersonalModules:
 
             self.work_income = random.randint(-500, 1000)  # Random income
 
-            with open('~/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
+            with open('/Users/wangyinuo/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
                 self.work_economy_stats = json.load(f)
                 f.close()
 
@@ -628,7 +628,7 @@ class PersonalModules:
             except KeyError:
                 self.work_economy_stats[uid]['coins'] = 0 + self.work_income
 
-            with open('~/Documents/Superior-Bot/storage/economy.json', 'w') as f:  # Dump the current status
+            with open('/Users/wangyinuo/Documents/Superior-Bot/storage/economy.json', 'w') as f:  # Dump the current status
                 json.dump(self.work_economy_stats, f)
                 f.close()
 
@@ -648,6 +648,7 @@ class PersonalModules:
         self.send(uid, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nsexypic {Get 5 sexy pics from Pixiv. USE BY CAUTION}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
+# Initialize modules
 modules = Modules()
 minecraft = Modules.Minecraft()
 timed = Modules.Timed()
