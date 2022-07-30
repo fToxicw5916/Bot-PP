@@ -65,7 +65,7 @@ class Modules:
             try:
                 self.mc_query_res = requests.get(f"http://127.0.0.1/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
             except Exception:  # The query server is offline
-                Modules.send(group_id, user_id, "Query server is offline! Please notify admin!")
+                modules.send(group_id, user_id, "Query server is offline! Please notify admin!")
             self.mc_query_result = self.mc_query_res.json()  # Get JSON data
 
             # Get server details
@@ -75,9 +75,9 @@ class Modules:
                 self.mc_query_motd = self.mc_query_result['motd']['clean']
                 self.mc_query_online_players = self.mc_query_result['players']['online']
                 self.mc_query_max_players = self.mc_query_result['players']['max']
-                Modules.send(group_id, user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
+                modules.send(group_id, user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
             else:
-                Modules.send(group_id, user_id, 'The server is offline!')  # The server is offline
+                modules.send(group_id, user_id, 'The server is offline!')  # The server is offline
 
         def get_uuid(self, username: str):
             """Gets the UUID of a player and then stores it to get_uuid_uuid.
@@ -110,7 +110,7 @@ class Modules:
             except KeyError:
                 self.hyp_basic_info_most_recent_game = 'SKYBLOCK'
 
-            Modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
+            modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
 
         def hyp_bedwars_info(self, group_id: str, user_id: str, username: str):
             """Get's a player's Hypixel bedwars status using their UUID, and then sends the result to group_id while mentioning user_id.
@@ -143,9 +143,9 @@ class Modules:
                 self.hyp_bedwars_info_winstreak = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['winstreak']
                 self.hyp_bedwars_info_games_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['losses_bedwars']
             except KeyError:
-                Modules.send(group_id, user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
+                modules.send(group_id, user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
-            Modules.send(group_id, user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
+            modules.send(group_id, user_id, f"Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}")  # Send results
 
         def hyp_skyblock_info(self, group_id: str, uid: str, username: str):
             """Get username's skyblock info and sends it to group_id while mentioning uid.
@@ -167,7 +167,7 @@ class Modules:
                 try:
                     self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profiles'][i]['profile_id']
                 except KeyError:  # No profile?
-                    Modules.send(group_id, uid, "You don't have an Skyblock profile yet!")
+                    modules.send(group_id, uid, "You don't have an Skyblock profile yet!")
 
                 # Data
                 self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
@@ -202,7 +202,7 @@ class Modules:
             
                 # TODO: Fairy souls & Levels
                 # Send the result
-                Modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
+                modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
 
     def wotd(self, group_id: str):
         """Sends Bing's wallpaper to group_id without mentioning people.
@@ -253,7 +253,7 @@ class Modules:
                 group_id (str): The group's ID you want to send the result to.
             """
             if self.timed_localtime[4:10] == 'Jul  1':
-                Modules.send_public_message(group_id, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
+                modules.send_public_message(group_id, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
     class Economy:
         """Economy modules, inspired by UnbelievaBoat the discord bot.
         """
@@ -277,9 +277,9 @@ class Modules:
                 with open('../storage/economy.json', 'w') as f:
                     json.dump(self.get_current_economy_stats, f)
                     f.close()
-                Modules.send(group_id, uid, 'Your current economy status:\nCoins: 0')
+                modules.send(group_id, uid, 'Your current economy status:\nCoins: 0')
 
-            Modules.send(group_id, uid, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
+            modules.send(group_id, uid, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
 
         def work(self, group_id: str, uid: str):
             """Work to earn coins.
@@ -292,7 +292,7 @@ class Modules:
 
             self.work_income = random.randint(-500, 1000)  # Random income
 
-            with open('../storage/economy.json', 'r') as f:  # Open storage file and load the data
+            with open('~/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
                 self.work_economy_stats = json.load(f)
                 f.close()
 
@@ -305,16 +305,16 @@ class Modules:
             except KeyError:
                 self.work_economy_stats[uid]['coins'] = 0 + self.work_income
 
-            with open('../storage/economy.json', 'w') as f:  # Dump the current status
+            with open('~/Documents/Superior-Bot/storage/economy.json', 'w') as f:  # Dump the current status
                 json.dump(self.work_economy_stats, f)
                 f.close()
 
             if self.work_income > 0:  # You got some money!
-                Modules.send(group_id, uid, f"You got ${self.work_income}.")
+                modules.send(group_id, uid, f"You got ${self.work_income}.")
             elif self.work_income < 0:  # Too bad!
-                Modules.send(group_id, uid, f"You lost ${self.work_income}.")
+                modules.send(group_id, uid, f"You lost ${self.work_income}.")
             elif self.work_income == 0:
-                Modules.send(group_id, uid, 'Nothing happened...')
+                modules.send(group_id, uid, 'Nothing happened...')
 
     def help_(self, group_id: str):
         """Sends a help message to Group ID without mentioning anyone.
@@ -322,7 +322,7 @@ class Modules:
         Args:
             group_id (str): The group's ID you want to send the result to.
         """
-        self.send_public_message(group_id, "--- Keywords ---\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send_public_message(group_id, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 class PersonalModules:
@@ -374,7 +374,7 @@ class PersonalModules:
             try:
                 self.mc_query_res = requests.get(f"http://127.0.0.1/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
             except Exception:  # The query server is offline
-                PersonalModules.send(user_id, "Query server is offline! Please notify admin!")
+                personal_modules.send(user_id, "Query server is offline! Please notify admin!")
             self.mc_query_result = self.mc_query_res.json()  # Get JSON data
 
             # Get server details
@@ -383,9 +383,9 @@ class PersonalModules:
                 self.mc_query_motd = self.mc_query_result['motd']['clean']
                 self.mc_query_online_players = self.mc_query_result['players']['online']
                 self.mc_query_max_players = self.mc_query_result['players']['max']
-                PersonalModules.send(user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
+                personal_modules.send(user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
             else:
-                PersonalModules.send(user_id, 'The server is offline!')  # Server offline
+                personal_modules.send(user_id, 'The server is offline!')  # Server offline
 
         def get_uuid(self, username: str):
             """Get username's UUID.
@@ -417,7 +417,7 @@ class PersonalModules:
             except KeyError:
                 self.hyp_basic_info_most_recent_game = 'SKYBLOCK'
 
-            PersonalModules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
+            personal_modules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
 
         def hyp_bedwars_info(self, user_id: str, username: str):
             """Get username's basic Hypixel bedwars status and then sends it to user_id.
@@ -449,9 +449,9 @@ class PersonalModules:
                 self.hyp_bedwars_info_winstreak = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['winstreak']
                 self.hyp_bedwars_info_games_lost = self.hyp_bedwars_info_result['player']['stats']['Bedwars']['losses_bedwars']
             except KeyError:
-                PersonalModules.send(user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
+                personal_modules.send(user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
-            PersonalModules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
+            personal_modules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
 
         def hyp_skyblock_info(self, uid: str, username: str):
             """Get username's skyblock info and sends it to Group ID while mentioning uid.
@@ -471,7 +471,7 @@ class PersonalModules:
             try:
                 self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profiles'][0]['profile_id']
             except KeyError:  # No profile?
-                PersonalModules.send(uid, "You don't have an Skyblock profile yet!")
+                personal_modules.send(uid, "You don't have an Skyblock profile yet!")
 
             # Data
             self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
@@ -506,7 +506,7 @@ class PersonalModules:
             
             # TODO: Levels
             # Send the result
-            PersonalModules.send(uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmour:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
+            personal_modules.send(uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmour:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
 
 
     def sexypic(self, user_id: str):
@@ -527,8 +527,7 @@ class PersonalModules:
             self.random_sexy_file_type = self.random_sexy_result['data'][i]['ext']
 
             # Send to the user
-            self.send(user_id, f'[CQ:image,file={self.random_sexy_img_url}]')  # Send image
-            self.send(user_id, f'Author: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send description
+            self.send(user_id, f'[CQ:image,file={self.random_sexy_img_url}]\nAuthor: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send image
 
     def wotd(self, uid: str):
         """Get Bing's wallpaper and then sends it to uid.
@@ -579,7 +578,7 @@ class PersonalModules:
                 uid (str): The user's ID you want to send the respond to.
             """
             if self.timed_localtime[4:10] == 'Jul  1':
-                PersonalModules.send(uid, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
+                personal_modules.send(uid, 'Technoblade Never Dies!!!')  # TECHNOBLADE NEVER DIES!!!
     class Economy:
         """Superior Bot's Economy system for private chat. Inspired by UnbelievaBoat the discord bot.
         """
@@ -591,7 +590,7 @@ class PersonalModules:
             """
             uid = str(uid)  # Convert UID from int to str
 
-            with open('../storage/economy.json', 'r') as f:  # Open storage file and load the data
+            with open('~/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
                 self.get_current_economy_stats = json.load(f)  # Get the coins this user have
                 f.close()
 
@@ -599,12 +598,12 @@ class PersonalModules:
                 self.get_current_coins = self.get_current_economy_stats[uid]['coins']  # Get your coins
             except KeyError:  # No profile yet?
                 self.get_current_economy_stats[uid]['coins'] = 0  # Create new profile
-                with open('../storage/economy.json', 'w') as f:
+                with open('~/Documents/Superior-Bot/storage/economy.json', 'w') as f:
                     f.write(self.get_current_economy_stats)
                     f.close()
-                PersonalModules.send(uid, 'Your current economy status:\nCoins: 0')
+                personal_modules.send(uid, 'Your current economy status:\nCoins: 0')
 
-            PersonalModules.send(uid, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
+            personal_modules.send(uid, f"Your current economy status:\nCoins: {self.get_current_coins}")  # Send the results
 
         def work(self, uid: str):
             """Work to earn coins, and then sends the results to uid.
@@ -616,7 +615,7 @@ class PersonalModules:
 
             self.work_income = random.randint(-500, 1000)  # Random income
 
-            with open('../storage/economy.json', 'r') as f:  # Open storage file and load the data
+            with open('~/Documents/Superior-Bot/storage/economy.json', 'r') as f:  # Open storage file and load the data
                 self.work_economy_stats = json.load(f)
                 f.close()
 
@@ -629,16 +628,16 @@ class PersonalModules:
             except KeyError:
                 self.work_economy_stats[uid]['coins'] = 0 + self.work_income
 
-            with open('../storage/economy.json', 'w') as f:  # Dump the current status
+            with open('~/Documents/Superior-Bot/storage/economy.json', 'w') as f:  # Dump the current status
                 json.dump(self.work_economy_stats, f)
                 f.close()
 
             if self.work_income > 0:  # You got some money!
-                PersonalModules.send(uid, f"You got ${self.work_income}.")
+                personal_modules.send(uid, f"You got ${self.work_income}.")
             elif self.work_income < 0:  # Too bad!
-                PersonalModules.send(uid, f"You lost ${self.work_income}.")
+                personal_modules.send(uid, f"You lost ${self.work_income}.")
             elif self.work_income == 0:
-                PersonalModules.send(uid, 'Nothing happened...')
+                personal_modules.send(uid, 'Nothing happened...')
 
     def help_(self, uid: str):
         """Sends a help message to uid.
@@ -646,4 +645,15 @@ class PersonalModules:
         Args:
             uid (str): The user's ID you want to send the help message.
         """
-        self.send(uid, "--- Keywords ---\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nsexypic {Get a pic from Pixiv. The result will be send to you via private chat. You need to add the bot as your friend before using. USE BY CAUTION}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send(uid, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nsexypic {Get 5 sexy pics from Pixiv. USE BY CAUTION}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+
+
+modules = Modules()
+minecraft = Modules.Minecraft()
+timed = Modules.Timed()
+economy = Modules.Economy()
+
+personal_modules = PersonalModules()
+personal_minecraft = PersonalModules.Minecraft()
+personal_timed = PersonalModules.Timed()
+personal_economy = PersonalModules.Economy()

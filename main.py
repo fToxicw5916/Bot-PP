@@ -45,7 +45,7 @@ def main(msg: str, uid: str):
         modules.wotd(group_id)
 
     elif msg[0:4] == 'calc':  # Calculator
-        modules.calc(group_id, msg[5:])
+        modules.calc(group_id, uid, msg[5:])
 
     elif msg == 'news':  # News
         modules.get_news(group_id)
