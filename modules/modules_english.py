@@ -151,47 +151,51 @@ class Modules:
             for i in range(0, 2):
                 try:
                     self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profiles'][i]['profile_id']
-                except KeyError:  # No profile?
-                    modules.send(group_id, uid, "You don't have an Skyblock profile yet!")
 
-                # Data
-                # Profile cute name
-                self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
+                    # Data
+                    # Profile cute name
+                    self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
 
-                # Armor
-                self.hyp_skyblock_info_armor_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][0]['display_name']
-                self.hyp_skyblock_info_armor_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][1]['display_name']
-                self.hyp_skyblock_info_armor_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][2]['display_name']
-                self.hyp_skyblock_info_armor_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][3]['display_name']
-                self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor_set']
+                    # Armor
+                    self.hyp_skyblock_info_armor_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][0]['display_name']
+                    self.hyp_skyblock_info_armor_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][1]['display_name']
+                    self.hyp_skyblock_info_armor_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][2]['display_name']
+                    self.hyp_skyblock_info_armor_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][3]['display_name']
+                    self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor_set']
 
-                # Fairy souls
-                self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['collected']
-                self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['total']
+                    # Fairy souls
+                    self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['collected']
+                    self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['total']
 
-                # Levels
-                self.hyp_skyblock_info_taming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['taming']['level']
-                self.hyp_skyblock_info_farming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['farming']['level']
-                self.hyp_skyblock_info_mining_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['mining']['level']
-                self.hyp_skyblock_info_combat_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['combat']['level']
-                self.hyp_skyblock_info_foraging_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['foraging']['level']
-                self.hyp_skyblock_info_fishing_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['fishing']['level']
-                self.hyp_skyblock_info_enchanting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['enchanting']['level']
-                self.hyp_skyblock_info_alchemy_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['alchemy']['level']
-                self.hyp_skyblock_info_carpentry_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['carpentry']['level']
-                self.hyp_skyblock_info_runecrafting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['runecrafting']['level']
-                self.hyp_skyblock_info_social_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['social']['level']
-                self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['average_level']
-                self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)  # Originaly it is a float
+                    # Levels
+                    self.hyp_skyblock_info_taming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['taming']['level']
+                    self.hyp_skyblock_info_farming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['farming']['level']
+                    self.hyp_skyblock_info_mining_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['mining']['level']
+                    self.hyp_skyblock_info_combat_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['combat']['level']
+                    self.hyp_skyblock_info_foraging_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['foraging']['level']
+                    self.hyp_skyblock_info_fishing_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['fishing']['level']
+                    self.hyp_skyblock_info_enchanting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['enchanting']['level']
+                    self.hyp_skyblock_info_alchemy_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['alchemy']['level']
+                    self.hyp_skyblock_info_carpentry_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['carpentry']['level']
+                    self.hyp_skyblock_info_runecrafting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['runecrafting']['level']
+                    self.hyp_skyblock_info_social_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['social']['level']
+                    self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['average_level']
+                    self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)  # Originaly it is a float
             
-                # TODO: Slayer
-                # TODO: Pets
-                # TODO: Purse
-                # TODO: Current area
-            
-                # TODO: Fairy souls & Levels
-                # Send the result
-                modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
+                    # TODO: Slayer
+                    # TODO: Pets
+                    # TODO: Purse
+                    # TODO: Current area
+
+                    # TODO: Fairy souls & Levels
+                    # Send the result
+                    modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
+                except KeyError:  # No profile/KeyError
+                    continue
+                except IndexError:
+                    continue
+                else:
+                    break
 
     class Timed:
         """Timed keywords: Keywords that only works during a specific time.
