@@ -284,7 +284,7 @@ class Modules:
         Args:
             group_id (str): The group's ID you want to send the result to.
         """
-        self.send_public_message(group_id, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send_public_message(group_id, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsblist [In game name] {Get your list of profile in Hypixel Skyblock}\n\nsb [In game name] \"[Profile ID]\" {Get your Hypixel Skyblock basic info}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 class PersonalModules:
@@ -569,7 +569,7 @@ class PersonalModules:
         Args:
             uid (str): The user's ID you want to send the help message.
         """
-        self.send(uid, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\nsexypic {Get 5 sexy pics from Pixiv. USE BY CAUTION}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send(uid, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsblist [In game name] {Get your list of profile in Hypixel Skyblock}\n\nsb [In game name] \"[Profile ID]\" {Get your Hypixel Skyblock basic info}\n\nsexypic {Get 5 sexy pics from Pixiv. USE BY CAUTION}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 # Initialize modules
