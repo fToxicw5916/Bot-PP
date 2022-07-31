@@ -1,23 +1,16 @@
-"""The main file for Superior Bot.
+"""The main file for Superior Bot. (Debug mode)
 """
 # Import needed packages
 from flask import Flask, request  # For building a simple server to receiving messages
-import argparse  # Used to get arguments
 
 # Import module files
-from modules.modules_english import *  # English module
+from modules.modules_english_debug import *  # English module
 
 app = Flask(__name__)  # Create the Flask APP
-parser = argparse.ArgumentParser(description="Superior Bot manual")  # Create the parser
 
-parser.add_argument('Group_ID', type=int, help='Your QQ group ID')  # Group ID
-parser.add_argument('Host', type=str, default='127.0.0.1', help='Your IP')  # IP for flask server
-parser.add_argument('Port', type=str, default='9000', help='Your port')  # Port for flask server
-args = parser.parse_args()  # Parse the args
-
-group_id = args.Group_ID  # Get the group ID
-host = args.Host  # IP
-port = args.Port  # Port
+group_id = "915941507"  # Get the group ID
+host = "127.0.0.1"  # IP
+port = 9000  # Port
 bot = True  # If the bot if on or not
 
 
@@ -40,6 +33,15 @@ def main(msg: str, uid: str):
         minecraft.hyp_bedwars_info(group_id, uid, msg[3:])
     elif msg[0:2] == 'sb':  # Hypixel skyblock info
         minecraft.hyp_skyblock_info(group_id, uid, msg[3:])
+
+    elif msg == 'wotd':  # Wallpaper
+        modules.wotd(group_id)
+
+    elif msg[0:4] == 'calc':  # Calculator
+        modules.calc(group_id, uid, msg[5:])
+
+    elif msg == 'news':  # News
+        modules.get_news(group_id)
 
     # Times keywords
     elif 'technoblade' in msg or 'techno' in msg:
@@ -78,6 +80,14 @@ def personal_main(msg: str, uid: str):
 
     elif msg == 'sexypic':  # Random sexypic
         personal_modules.sexypic(uid)
+    elif msg == 'wotd':  # Wallpaper
+        personal_modules.wotd(uid)
+
+    elif msg[0:4] == 'calc':  # Calculator
+        personal_modules.calc(uid, msg[5:])
+
+    elif msg == 'news':  # News
+        personal_modules.get_news(uid)
 
     # Times keywords
     elif 'technoblade' in msg or 'techno' in msg:
