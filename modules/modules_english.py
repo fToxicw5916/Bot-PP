@@ -132,70 +132,75 @@ class Modules:
 
             modules.send(group_id, user_id, f"Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}")  # Send results
 
-        def hyp_skyblock_info(self, group_id: str, uid: str, username: str):
+        def hyp_skyblock_list(self, group_id: str, uid: str, username: str):
+            """List the profile IDs.
+
+            Args:
+                group_id (str): The group's ID you want to send the results to.
+                uid (str): The user's ID you want to mention.
+                username (str): The player's username, which will be feed into get_uuid().
+            """
+            self.get_uuid(username)  # Get UUID
+            self.hyp_skyblock_list_res = requests.get(f"https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}")
+            self.hyp_skyblock_list_result = self.hyp_skyblock_list_res.json()
+
+            for i in range(0, 2):  # 3 profile for each player
+                self.profile_id = self.hyp_skyblock_list_result['profiles'][i]['profile_id']
+                self.profile_cute_name = self.hyp_skyblock_list_result['profiles'][i]['cute_name']
+                modules.send(group_id, uid, f"{self.profile_cute_name}: {self.profile_id}")  # Send results
+
+        def hyp_skyblock_info(self, group_id: str, uid: str, username: str, profile_id: str):
             """Get username's skyblock info and sends it to group_id while mentioning uid.
 
             Args:
                 group_id (str): The group's ID you want to send the result to.
                 uid (str): The user's ID you want to mention.
                 username (str): The player's username, which will be feed into get_uuid to get the player's UUID.
+                profile_id (str): The player's profile ID.
             """
-            self.get_uuid(username)  # Get the player's UUID
-            # Get the player's profile ID
-            self.hyp_skyblock_info_profile_res = requests.get(f'https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
-            self.hyp_skyblock_info_profile_result = self.hyp_skyblock_info_profile_res.json()
+            profile_id = profile_id.strip("\"")
             # Get the player's skyblock info
-            self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")
-            self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
+            self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")  # Get data
+            self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()  # Get JSON data
 
-            for i in range(0, 2):
-                try:
-                    self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profiles'][i]['profile_id']
+            # Data
+            # Armor
+            self.hyp_skyblock_info_armor_boots = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor'][0]['display_name']
+            self.hyp_skyblock_info_armor_leggings = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor'][1]['display_name']
+            self.hyp_skyblock_info_armor_chestplate = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor'][2]['display_name']
+            self.hyp_skyblock_info_armor_head = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor'][3]['display_name']
+            try:
+                self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor_set']
+            except KeyError:
+                self.hyp_skyblock_info_armor_set = "None"
 
-                    # Data
-                    # Profile cute name
-                    self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
+            # Fairy souls
+            self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['fairy_souls']['collected']
+            self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['fairy_souls']['total']
 
-                    # Armor
-                    self.hyp_skyblock_info_armor_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][0]['display_name']
-                    self.hyp_skyblock_info_armor_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][1]['display_name']
-                    self.hyp_skyblock_info_armor_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][2]['display_name']
-                    self.hyp_skyblock_info_armor_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][3]['display_name']
-                    self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor_set']
+            # Levels
+            self.hyp_skyblock_info_taming_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['taming']['level']
+            self.hyp_skyblock_info_farming_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['farming']['level']
+            self.hyp_skyblock_info_mining_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['mining']['level']
+            self.hyp_skyblock_info_combat_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['combat']['level']
+            self.hyp_skyblock_info_foraging_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['foraging']['level']
+            self.hyp_skyblock_info_fishing_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['fishing']['level']
+            self.hyp_skyblock_info_enchanting_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['enchanting']['level']
+            self.hyp_skyblock_info_alchemy_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['alchemy']['level']
+            self.hyp_skyblock_info_carpentry_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['carpentry']['level']
+            self.hyp_skyblock_info_runecrafting_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['runecrafting']['level']
+            self.hyp_skyblock_info_social_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['social']['level']
+            self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['average_level']
+            self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)  # Originaly it is a float
 
-                    # Fairy souls
-                    self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['collected']
-                    self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['total']
+            # TODO: Slayer
+            # TODO: Pets
+            # TODO: Purse
+            # TODO: Current area
 
-                    # Levels
-                    self.hyp_skyblock_info_taming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['taming']['level']
-                    self.hyp_skyblock_info_farming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['farming']['level']
-                    self.hyp_skyblock_info_mining_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['mining']['level']
-                    self.hyp_skyblock_info_combat_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['combat']['level']
-                    self.hyp_skyblock_info_foraging_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['foraging']['level']
-                    self.hyp_skyblock_info_fishing_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['fishing']['level']
-                    self.hyp_skyblock_info_enchanting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['enchanting']['level']
-                    self.hyp_skyblock_info_alchemy_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['alchemy']['level']
-                    self.hyp_skyblock_info_carpentry_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['carpentry']['level']
-                    self.hyp_skyblock_info_runecrafting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['runecrafting']['level']
-                    self.hyp_skyblock_info_social_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['social']['level']
-                    self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['average_level']
-                    self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)  # Originaly it is a float
-            
-                    # TODO: Slayer
-                    # TODO: Pets
-                    # TODO: Purse
-                    # TODO: Current area
-
-                    # TODO: Fairy souls & Levels
-                    # Send the result
-                    modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
-                except KeyError:  # No profile/KeyError
-                    continue
-                except IndexError:
-                    continue
-                else:
-                    break
+            # TODO: Fairy souls & Levels
+            # Send the result
+            modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {profile_id}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
 
     class Timed:
         """Timed keywords: Keywords that only works during a specific time.
@@ -396,61 +401,73 @@ class PersonalModules:
 
             personal_modules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
 
-        def hyp_skyblock_info(self, uid: str, username: str):
+        def hyp_skyblock_list(self, uid: str, username: str):
+            """List the profile IDs.
+
+            Args:
+                uid (str): The user's ID you want to mention.
+                username (str): The player's username, which will be feed into get_uuid().
+            """
+            self.get_uuid(username)
+            self.hyp_skyblock_list_res = requests.get(f"https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}")
+            self.hyp_skyblock_list_result = self.hyp_skyblock_list_res.json()
+
+            for i in range(0, 2):
+                self.profile_id = self.hyp_skyblock_list_result['profiles'][i]['profile_id']
+                self.profile_cute_name = self.hyp_skyblock_list_result['profiles'][i]['cute_name']
+                personal_modules.send(uid, f"{self.profile_cute_name}: {self.profile_id}")
+
+        def hyp_skyblock_info(self, uid: str, username: str, profile_id: str):
             """Get username's skyblock info and sends it to Group ID while mentioning uid.
 
             Args:
                 uid (str): The user's ID you want to mention.
                 username (str): The player's username, which will be feed into get_uuid to get the player's UUID.
+                profile_id (str): The player's profile ID.
             """
-            self.get_uuid(username)  # Get the player's UUID
-            # Get the player's profile ID
-            self.hyp_skyblock_info_profile_res = requests.get(f'https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')
-            self.hyp_skyblock_info_profile_result = self.hyp_skyblock_info_profile_res.json()
+            profile_id = profile_id.strip("\"")
             # Get the player's skyblock info
             self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")
             self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
 
-            try:
-                self.hyp_skyblock_info_profile = self.hyp_skyblock_info_profile_result['profiles'][0]['profile_id']
-            except KeyError:  # No profile?
-                personal_modules.send(uid, "You don't have an Skyblock profile yet!")
-
             # Data
-            self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
-    
-            self.hyp_skyblock_info_armor_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][0]['display_name']
-            self.hyp_skyblock_info_armor_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][1]['display_name']
-            self.hyp_skyblock_info_armor_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][2]['display_name']
-            self.hyp_skyblock_info_armor_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][3]['display_name']
-            self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor_set']
+            # Armor
+            self.hyp_skyblock_info_armor_boots = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor'][0]['display_name']
+            self.hyp_skyblock_info_armor_leggings = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor'][1]['display_name']
+            self.hyp_skyblock_info_armor_chestplate = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor'][2]['display_name']
+            self.hyp_skyblock_info_armor_head = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor'][3]['display_name']
+            try:
+                self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor_set']
+            except KeyError:
+                self.hyp_skyblock_info_armor_set = "None"
 
-            self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['collected']
-            self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['total']
-            
-            self.hyp_skyblock_info_taming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['taming']['level']
-            self.hyp_skyblock_info_farming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['farming']['level']
-            self.hyp_skyblock_info_mining_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['mining']['level']
-            self.hyp_skyblock_info_combat_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['combat']['level']
-            self.hyp_skyblock_info_foraging_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['foraging']['level']
-            self.hyp_skyblock_info_fishing_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['fishing']['level']
-            self.hyp_skyblock_info_enchanting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['enchanting']['level']
-            self.hyp_skyblock_info_alchemy_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['alchemy']['level']
-            self.hyp_skyblock_info_carpentry_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['carpentry']['level']
-            self.hyp_skyblock_info_runecrafting_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['runecrafting']['level']
-            self.hyp_skyblock_info_social_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['social']['level']
-            self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['average_level']
-            self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)
-            
+            # Fairy souls
+            self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['fairy_souls']['collected']
+            self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['fairy_souls']['total']
+
+            # Levels
+            self.hyp_skyblock_info_taming_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['taming']['level']
+            self.hyp_skyblock_info_farming_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['farming']['level']
+            self.hyp_skyblock_info_mining_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['mining']['level']
+            self.hyp_skyblock_info_combat_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['combat']['level']
+            self.hyp_skyblock_info_foraging_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['foraging']['level']
+            self.hyp_skyblock_info_fishing_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['fishing']['level']
+            self.hyp_skyblock_info_enchanting_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['enchanting']['level']
+            self.hyp_skyblock_info_alchemy_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['alchemy']['level']
+            self.hyp_skyblock_info_carpentry_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['carpentry']['level']
+            self.hyp_skyblock_info_runecrafting_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['runecrafting']['level']
+            self.hyp_skyblock_info_social_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['social']['level']
+            self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['average_level']
+            self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)  # Originaly a float
+
             # TODO: Slayer
             # TODO: Pets
             # TODO: Purse
             # TODO: Current area
-            
+
             # TODO: Levels
             # Send the result
-            personal_modules.send(uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmour:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
-
+            personal_modules.send(uid, f"Skyblock data:\n\nProfile ID: {profile_id}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
 
     def sexypic(self, user_id: str):
         """Get 5 random sexy pic from Pixiv and then sends it to user_id
