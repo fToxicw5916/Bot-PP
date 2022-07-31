@@ -10,14 +10,14 @@ from modules.modules_english import *  # English module
 app = Flask(__name__)  # Create the Flask APP
 parser = argparse.ArgumentParser(description="Superior Bot manual")  # Create the parser
 
-# parser.add_argument('Group_ID', type=int, help='Your QQ group ID')  # Group ID
-# parser.add_argument('Host', type=str, default='127.0.0.1', help='Your IP')  # IP for flask server
-# parser.add_argument('Port', type=str, default='9000', help='Your port')  # Port for flask server
-# args = parser.parse_args()  # Parse the args
+parser.add_argument('Group_ID', type=int, help='Your QQ group ID')  # Group ID
+parser.add_argument('Host', type=str, default='127.0.0.1', help='Your IP')  # IP for flask server
+parser.add_argument('Port', type=str, default='9000', help='Your port')  # Port for flask server
+args = parser.parse_args()  # Parse the args
 
-group_id = "915941507"  # args.Group_ID  # Get the group ID
-host = "127.0.0.1"  # args.Host  # IP
-port = 9000  # args.Port  # Port
+group_id = args.Group_ID  # Get the group ID
+host = args.Host  # IP
+port = args.Port  # Port
 bot = True  # If the bot if on or not
 
 
