@@ -1,6 +1,7 @@
 """The modules for Superior Bot (English).
 """
 # Import needed packages
+import profile
 import requests  # For sending requests to the bot
 import json  # For managing Minecraft server query response
 import time  # Used for timed keywords and others
@@ -61,7 +62,11 @@ class Modules:
                 self.mc_query_motd = self.mc_query_result['motd']['clean']
                 self.mc_query_online_players = self.mc_query_result['players']['online']
                 self.mc_query_max_players = self.mc_query_result['players']['max']
-                modules.send(group_id, user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
+                modules.send(group_id, user_id, f"""Status: {self.mc_query_online}
+
+MOTD: {self.mc_query_motd}
+Online players: {self.mc_query_online_players}
+Max players: {self.mc_query_max_players}""")  # Send results
             else:
                 modules.send(group_id, user_id, 'The server is offline!')  # The server is offline
 
@@ -107,7 +112,16 @@ class Modules:
                 self.hyp_basic_info_gadget = 'NONE'
                 self.hyp_basic_info_language = 'NONE'
 
-            modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nKarma: {self.hyp_basic_info_karma}\nRank: {self.hyp_basic_info_rank}\nGuild: {self.hyp_basic_info_guild}\nMost recent game: {self.hyp_basic_info_most_recent_game}\nCurrent pet: {self.hyp_basic_info_pet}\nCurrent gadget: {self.hyp_basic_info_gadget}\nLanguage: {self.hyp_basic_info_language}')
+            modules.send(group_id, uid, f"""Hypixel basic information:
+
+Display name: {self.hyp_basic_info_displayname}
+Karma: {self.hyp_basic_info_karma}
+Rank: {self.hyp_basic_info_rank}
+Guild: {self.hyp_basic_info_guild}
+Most recent game: {self.hyp_basic_info_most_recent_game}
+Current pet: {self.hyp_basic_info_pet}
+Current gadget: {self.hyp_basic_info_gadget}
+Language: {self.hyp_basic_info_language}""")
 
         def hyp_bedwars_info(self, group_id: str, user_id: str, username: str):
             """Get's a player's Hypixel bedwars status using their UUID, and then sends the result to group_id while mentioning user_id.
@@ -143,7 +157,23 @@ class Modules:
             except KeyError:
                 modules.send(group_id, user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
-            modules.send(group_id, user_id, f"Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}")  # Send results
+            modules.send(group_id, user_id, f"""Bedwars data:
+
+Bedwars experience: {self.hyp_bedwars_info_exp}
+Bedwars coins: {self.hyp_bedwars_info_coins}
+Bedwars played: {self.hyp_bedwars_info_games_played}
+Items purchased: {self.hyp_bedwars_info_item_purchased}
+
+Kills: {self.hyp_bedwars_info_kills}
+Final kills: {self.hyp_bedwars_info_final_kills}
+Deaths: {self.hyp_bedwars_info_deaths}
+Final deaths: {self.hyp_bedwars_info_final_deaths}
+
+Beds broken: {self.hyp_bedwars_info_beds_broken}
+Beds lost: {self.hyp_bedwars_info_beds_lost}
+Games won: {self.hyp_bedwars_info_games_won}
+Winstreak: {self.hyp_bedwars_info_winstreak}
+Games lost: {self.hyp_bedwars_info_games_lost}""")  # Send results
 
         def hyp_skyblock_list(self, group_id: str, uid: str, username: str):
             """List the profile IDs.
@@ -208,14 +238,29 @@ class Modules:
             self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['average_level']
             self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)  # Originaly it is a float
 
-            # TODO: Slayer
+            # Slayer
+            self.hyp_skyblock_spider_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['level']['currentLevel']
+            self.hyp_skyblock_spider_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['level']['progress']
+            self.hyp_skyblock_spider_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['level']['xpForNext']
             # TODO: Pets
             # TODO: Purse
             # TODO: Current area
 
             # TODO: Fairy souls & Levels
             # Send the result
-            modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {profile_id}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
+            modules.send(group_id, uid, f"""Skyblock data:
+
+Profile ID: {profile_id}
+
+Armor:
+Helmet: {self.hyp_skyblock_info_armor_head}
+Chestplate: {self.hyp_skyblock_info_armor_chestplate}
+Leggings: {self.hyp_skyblock_info_armor_leggings}
+Boots: {self.hyp_skyblock_info_armor_boots}
+Armor set: {self.hyp_skyblock_info_armor_set}
+
+Slayer:
+""")
 
     class Timed:
         """Timed keywords: Keywords that only works during a specific time.
@@ -299,7 +344,21 @@ class Modules:
         Args:
             group_id (str): The group's ID you want to send the result to.
         """
-        self.send_public_message(group_id, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsblist [In game name] {Get your list of profile in Hypixel Skyblock}\n\nsb [In game name] \"[Profile ID]\" {Get your Hypixel Skyblock basic info}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send_public_message(group_id, """--- Keywords ---
+
+help {Get the help message}
+query [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}
+hyp [In game name] {Get your Hypixel basic info}
+bw [In game name] {Get your Hypixel bedwars info}
+sblist [In game name] {Get your list of profile in Hypixel Skyblock}
+sb [In game name] \"[Profile ID]\" {Get your Hypixel Skyblock basic info}
+
+--- Economy ---
+^balance/^bal {How much cash do you have}
+^work {Work for cash.. or lose them}
+
+--- Timed keywords ---
+Technoblade/Techno: Available: Jul 1""")
 
 
 class PersonalModules:
@@ -347,7 +406,11 @@ class PersonalModules:
                 self.mc_query_motd = self.mc_query_result['motd']['clean']
                 self.mc_query_online_players = self.mc_query_result['players']['online']
                 self.mc_query_max_players = self.mc_query_result['players']['max']
-                personal_modules.send(user_id, f"Status: {self.mc_query_online}\nMOTD: {self.mc_query_motd}\nOnline players: {self.mc_query_online_players}\nMax players: {self.mc_query_max_players}")  # Send results
+                personal_modules.send(user_id, f"""Status: {self.mc_query_online}
+
+MOTD: {self.mc_query_motd}
+Online players: {self.mc_query_online_players}
+Max players: {self.mc_query_max_players}""")  # Send results
             else:
                 personal_modules.send(user_id, 'The server is offline!')  # Server offline
 
@@ -392,7 +455,16 @@ class PersonalModules:
                 self.hyp_basic_info_gadget = 'NONE'
                 self.hyp_basic_info_language = 'NONE'
 
-            personal_modules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nKarma: {self.hyp_basic_info_karma}\nRank: {self.hyp_basic_info_rank}\nGuild: {self.hyp_basic_info_guild}\nMost recent game: {self.hyp_basic_info_most_recent_game}\nCurrent pet: {self.hyp_basic_info_pet}\nCurrent gadget: {self.hyp_basic_info_gadget}\nLanguage: {self.hyp_basic_info_language}')
+            personal_modules.send(uid, f"""Hypixel basic information:
+
+Display name: {self.hyp_basic_info_displayname}
+Karma: {self.hyp_basic_info_karma}
+Rank: {self.hyp_basic_info_rank}
+Guild: {self.hyp_basic_info_guild}
+Most recent game: {self.hyp_basic_info_most_recent_game}
+Current pet: {self.hyp_basic_info_pet}
+Current gadget: {self.hyp_basic_info_gadget}
+Language: {self.hyp_basic_info_language}""")
 
 
         def hyp_bedwars_info(self, user_id: str, username: str):
@@ -428,7 +500,23 @@ class PersonalModules:
             except KeyError:
                 personal_modules.send(user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
-            personal_modules.send(user_id, f'Bedwars data:\nBedwars experience: {self.hyp_bedwars_info_exp}\nBedwars coins: {self.hyp_bedwars_info_coins}\nBedwars played: {self.hyp_bedwars_info_games_played}\nItems purchased: {self.hyp_bedwars_info_item_purchased}\nKills: {self.hyp_bedwars_info_kills}\nFinal kills: {self.hyp_bedwars_info_final_kills}\nDeaths: {self.hyp_bedwars_info_deaths}\nFinal deaths: {self.hyp_bedwars_info_final_deaths}\nBeds broken: {self.hyp_bedwars_info_beds_broken}\nBeds lost: {self.hyp_bedwars_info_beds_lost}\nGames won: {self.hyp_bedwars_info_games_won}\nWinstreak: {self.hyp_bedwars_info_winstreak}\nGames lost: {self.hyp_bedwars_info_games_lost}')  # Send results
+            personal_modules.send(user_id, f"""Bedwars data:
+
+Bedwars experience: {self.hyp_bedwars_info_exp}
+Bedwars coins: {self.hyp_bedwars_info_coins}
+Bedwars played: {self.hyp_bedwars_info_games_played}
+Items purchased: {self.hyp_bedwars_info_item_purchased}
+
+Kills: {self.hyp_bedwars_info_kills}
+Final kills: {self.hyp_bedwars_info_final_kills}
+Deaths: {self.hyp_bedwars_info_deaths}
+Final deaths: {self.hyp_bedwars_info_final_deaths}
+
+Beds broken: {self.hyp_bedwars_info_beds_broken}
+Beds lost: {self.hyp_bedwars_info_beds_lost}
+Games won: {self.hyp_bedwars_info_games_won}
+Winstreak: {self.hyp_bedwars_info_winstreak}
+Games lost: {self.hyp_bedwars_info_games_lost}""")  # Send results
 
         def hyp_skyblock_list(self, uid: str, username: str):
             """List the profile IDs.
@@ -498,7 +586,16 @@ class PersonalModules:
 
             # TODO: Levels
             # Send the result
-            personal_modules.send(uid, f"Skyblock data:\n\nProfile ID: {profile_id}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
+            personal_modules.send(uid, f"""Skyblock data:
+
+Profile ID: {profile_id}
+
+Armor:
+Helmet: {self.hyp_skyblock_info_armor_head}
+Chestplate: {self.hyp_skyblock_info_armor_chestplate}
+Leggings: {self.hyp_skyblock_info_armor_leggings}
+Boots: {self.hyp_skyblock_info_armor_boots}
+Armor set: {self.hyp_skyblock_info_armor_set}""")
 
     def sexypic(self, user_id: str):
         """Get 5 random sexy pic from Pixiv and then sends it to user_id
@@ -601,7 +698,22 @@ class PersonalModules:
         Args:
             uid (str): The user's ID you want to send the help message.
         """
-        self.send(uid, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsblist [In game name] {Get your list of profile in Hypixel Skyblock}\n\nsb [In game name] \"[Profile ID]\" {Get your Hypixel Skyblock basic info}\n\nsexypic {Get 5 sexy pics from Pixiv. USE BY CAUTION}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send(uid, """--- Keywords ---
+
+help {Get the help message}
+query [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}
+hyp [In game name] {Get your Hypixel basic info}
+bw [In game name] {Get your Hypixel bedwars info}
+sblist [In game name] {Get your list of profile in Hypixel Skyblock}
+sb [In game name] \"[Profile ID]\" {Get your Hypixel Skyblock basic info}
+sexypic {Get 5 sexy pics from Pixiv. USE BY CAUTION}
+
+--- Economy ---
+^balance/^bal {How much cash do you have}
+^work {Work for cash.. or lose them}
+
+--- Timed keywords ---
+Technoblade/Techno: Available: Jul 1""")
 
 
 # Initialize modules
