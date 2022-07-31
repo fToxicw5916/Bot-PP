@@ -88,12 +88,15 @@ class Modules:
             self.get_uuid(username)  # First, get UUID
             self.hyp_basic_info_res = requests.get(f'https://api.hypixel.net/player?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get basic info from Hypixel API
             self.hyp_basic_info_result = self.hyp_basic_info_res.json()  # Get JSON data from the response
+            self.hyp_basic_info_guild_res = requests.get(f"https://api.hypixel.net/guild?key={self.hypixel_api_key}&player={self.get_uuid_uuid}")  # Get guild info
+            self.hyp_basic_info_guild_result = self.hyp_basic_info_guild_res.json()  # Guild data in JSON
 
             # Data
             try:
                 self.hyp_basic_info_displayname = self.hyp_basic_info_result['player']['displayname']
                 self.hyp_basic_info_karma = self.hyp_basic_info_result['player']['karma']
                 self.hyp_basic_info_rank = self.hyp_basic_info_result['player']['newPackageRank']
+                self.hyp_basic_info_guild = self.hyp_basic_info_guild_result['guild']['name']
                 self.hyp_basic_info_most_recent_game = self.hyp_basic_info_result['player']['mostRecentGameType']
                 self.hyp_basic_info_pet = self.hyp_basic_info_result['player']['currentPet']
                 self.hyp_basic_info_gadget = self.hyp_basic_info_result['player']['currentGadget']
@@ -104,7 +107,7 @@ class Modules:
                 self.hyp_basic_info_gadget = 'NONE'
                 self.hyp_basic_info_language = 'NONE'
 
-            modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nKarma: {self.hyp_basic_info_karma}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}\nCurrent pet: {self.hyp_basic_info_pet}\nCurrent gadget: {self.hyp_basic_info_gadget}\nLanguage: {self.hyp_basic_info_language}')
+            modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nKarma: {self.hyp_basic_info_karma}\nRank: {self.hyp_basic_info_rank}\nGuild: {self.hyp_basic_info_guild}\nMost recent game: {self.hyp_basic_info_most_recent_game}\nCurrent pet: {self.hyp_basic_info_pet}\nCurrent gadget: {self.hyp_basic_info_gadget}\nLanguage: {self.hyp_basic_info_language}')
 
         def hyp_bedwars_info(self, group_id: str, user_id: str, username: str):
             """Get's a player's Hypixel bedwars status using their UUID, and then sends the result to group_id while mentioning user_id.
@@ -370,12 +373,15 @@ class PersonalModules:
             self.get_uuid(username)  # First, get UUID
             self.hyp_basic_info_res = requests.get(f'https://api.hypixel.net/player?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get basic info from Hypixel API
             self.hyp_basic_info_result = self.hyp_basic_info_res.json()  # Get JSON data from the response
+            self.hyp_basic_info_guild_res = requests.get(f"https://api.hypixel.net/guild?key={self.hypixel_api_key}&player={self.get_uuid_uuid}")  # Get guild info
+            self.hyp_basic_info_guild_result = self.hyp_basic_info_guild_res.json()  # Guild data in JSON
 
             # Data
             try:
                 self.hyp_basic_info_displayname = self.hyp_basic_info_result['player']['displayname']
                 self.hyp_basic_info_karma = self.hyp_basic_info_result['player']['karma']
                 self.hyp_basic_info_rank = self.hyp_basic_info_result['player']['newPackageRank']
+                self.hyp_basic_info_guild = self.hyp_basic_info_guild_result['guild']['name']
                 self.hyp_basic_info_most_recent_game = self.hyp_basic_info_result['player']['mostRecentGameType']
                 self.hyp_basic_info_pet = self.hyp_basic_info_result['player']['currentPet']
                 self.hyp_basic_info_gadget = self.hyp_basic_info_result['player']['currentGadget']
@@ -386,7 +392,7 @@ class PersonalModules:
                 self.hyp_basic_info_gadget = 'NONE'
                 self.hyp_basic_info_language = 'NONE'
 
-            personal_modules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nKarma: {self.hyp_basic_info_karma}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}\nCurrent pet: {self.hyp_basic_info_pet}\nCurrent gadget: {self.hyp_basic_info_gadget}\nLanguage: {self.hyp_basic_info_language}')
+            personal_modules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nKarma: {self.hyp_basic_info_karma}\nRank: {self.hyp_basic_info_rank}\nGuild: {self.hyp_basic_info_guild}\nMost recent game: {self.hyp_basic_info_most_recent_game}\nCurrent pet: {self.hyp_basic_info_pet}\nCurrent gadget: {self.hyp_basic_info_gadget}\nLanguage: {self.hyp_basic_info_language}')
 
 
         def hyp_bedwars_info(self, user_id: str, username: str):
