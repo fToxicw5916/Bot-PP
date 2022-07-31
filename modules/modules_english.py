@@ -112,8 +112,7 @@ Max players: {self.mc_query_max_players}""")  # Send results
                 self.hyp_basic_info_gadget = 'NONE'
                 self.hyp_basic_info_language = 'NONE'
 
-            modules.send(group_id, uid, f"""Hypixel basic information:
-
+            modules.send(group_id, uid, f"""--- Hypixel basic information ---
 Display name: {self.hyp_basic_info_displayname}
 Karma: {self.hyp_basic_info_karma}
 Rank: {self.hyp_basic_info_rank}
@@ -157,8 +156,7 @@ Language: {self.hyp_basic_info_language}""")
             except KeyError:
                 modules.send(group_id, user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
-            modules.send(group_id, user_id, f"""Bedwars data:
-
+            modules.send(group_id, user_id, f"""--- Bedwars data ---
 Bedwars experience: {self.hyp_bedwars_info_exp}
 Bedwars coins: {self.hyp_bedwars_info_coins}
 Bedwars played: {self.hyp_bedwars_info_games_played}
@@ -239,28 +237,141 @@ Games lost: {self.hyp_bedwars_info_games_lost}""")  # Send results
             self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)  # Originaly it is a float
 
             # Slayer
+            # Spider
             self.hyp_skyblock_spider_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['level']['currentLevel']
             self.hyp_skyblock_spider_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['level']['progress']
             self.hyp_skyblock_spider_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['level']['xpForNext']
+            self.hyp_skyblock_spider_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['kills']['1']
+            self.hyp_skyblock_spider_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['kills']['2']
+            self.hyp_skyblock_spider_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['kills']['3']
+            self.hyp_skyblock_spider_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['kills']['4']
+            self.hyp_skyblock_spider_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['xp']
+            # Wolf
+            self.hyp_skyblock_wolf_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['level']['currentLevel']
+            self.hyp_skyblock_wolf_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['level']['progress']
+            self.hyp_skyblock_wolf_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['level']['xpForNext']
+            self.hyp_skyblock_wolf_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['kills']['1']
+            self.hyp_skyblock_wolf_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['kills']['2']
+            self.hyp_skyblock_wolf_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['kills']['3']
+            self.hyp_skyblock_wolf_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['kills']['4']
+            self.hyp_skyblock_wolf_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['xp']
+            # Zombie
+            self.hyp_skyblock_zombie_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['level']['currentLevel']
+            self.hyp_skyblock_zombie_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['level']['progress']
+            self.hyp_skyblock_zombie_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['level']['xpForNext']
+            self.hyp_skyblock_zombie_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['1']
+            self.hyp_skyblock_zombie_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['2']
+            self.hyp_skyblock_zombie_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['3']
+            self.hyp_skyblock_zombie_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['4']
+            self.hyp_skyblock_zombie_slayer_tier5_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['5']
+            self.hyp_skyblock_zombie_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['xp']
+            # Enderman
+            self.hyp_skyblock_enderman_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['level']['currentLevel']
+            self.hyp_skyblock_enderman_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['level']['progress']
+            self.hyp_skyblock_enderman_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['level']['xpForNext']
+            self.hyp_skyblock_enderman_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['kills']['1']
+            self.hyp_skyblock_enderman_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['kills']['2']
+            self.hyp_skyblock_enderman_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['kills']['3']
+            self.hyp_skyblock_enderman_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['kills']['4']
+            self.hyp_skyblock_enderman_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['xp']
+            # Blaze
+            self.hyp_skyblock_blaze_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['level']['currentLevel']
+            self.hyp_skyblock_blaze_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['level']['progress']
+            self.hyp_skyblock_blaze_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['level']['xpForNext']
+            self.hyp_skyblock_blaze_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['kills']['1']
+            self.hyp_skyblock_blaze_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['kills']['2']
+            self.hyp_skyblock_blaze_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['kills']['3']
+            self.hyp_skyblock_blaze_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['kills']['4']
+            self.hyp_skyblock_blaze_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['xp']
             # TODO: Pets
             # TODO: Purse
             # TODO: Current area
 
             # TODO: Fairy souls & Levels
             # Send the result
-            modules.send(group_id, uid, f"""Skyblock data:
-
+            modules.send(group_id, uid, f"""--- Skyblock data ---
 Profile ID: {profile_id}
 
-Armor:
+
+--- Armor ---
 Helmet: {self.hyp_skyblock_info_armor_head}
 Chestplate: {self.hyp_skyblock_info_armor_chestplate}
 Leggings: {self.hyp_skyblock_info_armor_leggings}
 Boots: {self.hyp_skyblock_info_armor_boots}
 Armor set: {self.hyp_skyblock_info_armor_set}
 
-Slayer:
-""")
+
+--- Fairy souls ---
+Collected: {self.hyp_skyblock_info_fairy_souls_collected}
+Total: {self.hyp_skyblock_info_fairy_souls_total}
+
+
+--- Levels ---
+Taming: {self.hyp_skyblock_info_taming_level}
+Farming: {self.hyp_skyblock_info_farming_level}
+Mining: {self.hyp_skyblock_info_mining_level}
+Combat: {self.hyp_skyblock_info_combat_level}
+Foraging: {self.hyp_skyblock_info_foraging_level}
+Fishing: {self.hyp_skyblock_info_fishing_level}
+Enchanting: {self.hyp_skyblock_info_enchanting_level}
+Alchemy: {self.hyp_skyblock_info_alchemy_level}
+Carpentry: {self.hyp_skyblock_info_carpentry_level}
+Runecrafting: {self.hyp_skyblock_info_runecrafting_level}
+Social: {self.hyp_skyblock_info_social_level}
+Average: {self.hyp_skyblock_info_average_level}
+
+
+--- Slayer ---
+Zombie:
+Slayer level: {self.hyp_skyblock_zombie_slayer_level}
+Level progress: {self.hyp_skyblock_zombie_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_zombie_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_zombie_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_zombie_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_zombie_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_zombie_slayer_tier4_kills}
+Tier 5 kills: {self.hyp_skyblock_zombie_slayer_tier5_kills}
+EXP: {self.hyp_skyblock_zombie_slayer_exp}
+
+Spider:
+Slayer level: {self.hyp_skyblock_spider_slayer_level}
+Level progress: {self.hyp_skyblock_spider_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_spider_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_spider_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_spider_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_spider_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_spider_slayer_tier4_kills}
+EXP: {self.hyp_skyblock_spider_slayer_exp}
+
+Wolf:
+Slayer level: {self.hyp_skyblock_wolf_slayer_level}
+Level progress: {self.hyp_skyblock_wolf_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_wolf_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_wolf_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_wolf_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_wolf_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_wolf_slayer_tier4_kills}
+EXP: {self.hyp_skyblock_wolf_slayer_exp}
+
+Enderman:
+Slayer level: {self.hyp_skyblock_enderman_slayer_level}
+Level progress: {self.hyp_skyblock_enderman_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_enderman_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_enderman_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_enderman_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_enderman_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_enderman_slayer_tier4_kills}
+EXP: {self.hyp_skyblock_enderman_slayer_exp}
+
+Blaze:
+Slayer level: {self.hyp_skyblock_blaze_slayer_level}
+Level progress: {self.hyp_skyblock_blaze_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_blaze_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_blaze_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_blaze_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_blaze_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_blaze_slayer_tier4_kills}
+EXP: {self.hyp_skyblock_blaze_slayer_exp}""")
 
     class Timed:
         """Timed keywords: Keywords that only works during a specific time.
@@ -345,7 +456,6 @@ Slayer:
             group_id (str): The group's ID you want to send the result to.
         """
         self.send_public_message(group_id, """--- Keywords ---
-
 help {Get the help message}
 query [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}
 hyp [In game name] {Get your Hypixel basic info}
@@ -455,8 +565,7 @@ Max players: {self.mc_query_max_players}""")  # Send results
                 self.hyp_basic_info_gadget = 'NONE'
                 self.hyp_basic_info_language = 'NONE'
 
-            personal_modules.send(uid, f"""Hypixel basic information:
-
+            personal_modules.send(uid, f"""--- Hypixel basic information ---
 Display name: {self.hyp_basic_info_displayname}
 Karma: {self.hyp_basic_info_karma}
 Rank: {self.hyp_basic_info_rank}
@@ -500,8 +609,7 @@ Language: {self.hyp_basic_info_language}""")
             except KeyError:
                 personal_modules.send(user_id, 'Something is wrong with your Hypixel bedwars profile. Please notice admin!')
 
-            personal_modules.send(user_id, f"""Bedwars data:
-
+            personal_modules.send(user_id, f"""--- Bedwars data ---
 Bedwars experience: {self.hyp_bedwars_info_exp}
 Bedwars coins: {self.hyp_bedwars_info_coins}
 Bedwars played: {self.hyp_bedwars_info_games_played}
@@ -536,18 +644,18 @@ Games lost: {self.hyp_bedwars_info_games_lost}""")  # Send results
                 personal_modules.send(uid, f"{self.profile_cute_name}: {self.profile_id}")
 
         def hyp_skyblock_info(self, uid: str, username: str, profile_id: str):
-            """Get username's skyblock info and sends it to Group ID while mentioning uid.
+            """Get username's skyblock info and sends it to group_id while mentioning uid.
 
             Args:
                 uid (str): The user's ID you want to mention.
                 username (str): The player's username, which will be feed into get_uuid to get the player's UUID.
                 profile_id (str): The player's profile ID.
             """
-            personal_modules.send(uid, "Received, processing...")
+            modules.send(uid, "Received, processing...")
             profile_id = profile_id.strip("\"")
             # Get the player's skyblock info
-            self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")
-            self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()
+            self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")  # Get data
+            self.hyp_skyblock_info_result = self.hyp_skyblock_info_res.json()  # Get JSON data
 
             # Data
             # Armor
@@ -577,25 +685,144 @@ Games lost: {self.hyp_bedwars_info_games_lost}""")  # Send results
             self.hyp_skyblock_info_runecrafting_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['runecrafting']['level']
             self.hyp_skyblock_info_social_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['levels']['social']['level']
             self.hyp_skyblock_info_average_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['average_level']
-            self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)  # Originaly a float
+            self.hyp_skyblock_info_average_level = int(self.hyp_skyblock_info_average_level)  # Originaly it is a float
 
-            # TODO: Slayer
+            # Slayer
+            # Spider
+            self.hyp_skyblock_spider_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['level']['currentLevel']
+            self.hyp_skyblock_spider_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['level']['progress']
+            self.hyp_skyblock_spider_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['level']['xpForNext']
+            self.hyp_skyblock_spider_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['kills']['1']
+            self.hyp_skyblock_spider_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['kills']['2']
+            self.hyp_skyblock_spider_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['kills']['3']
+            self.hyp_skyblock_spider_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['kills']['4']
+            self.hyp_skyblock_spider_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['spider']['xp']
+            # Wolf
+            self.hyp_skyblock_wolf_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['level']['currentLevel']
+            self.hyp_skyblock_wolf_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['level']['progress']
+            self.hyp_skyblock_wolf_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['level']['xpForNext']
+            self.hyp_skyblock_wolf_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['kills']['1']
+            self.hyp_skyblock_wolf_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['kills']['2']
+            self.hyp_skyblock_wolf_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['kills']['3']
+            self.hyp_skyblock_wolf_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['kills']['4']
+            self.hyp_skyblock_wolf_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['wolf']['xp']
+            # Zombie
+            self.hyp_skyblock_zombie_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['level']['currentLevel']
+            self.hyp_skyblock_zombie_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['level']['progress']
+            self.hyp_skyblock_zombie_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['level']['xpForNext']
+            self.hyp_skyblock_zombie_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['1']
+            self.hyp_skyblock_zombie_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['2']
+            self.hyp_skyblock_zombie_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['3']
+            self.hyp_skyblock_zombie_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['4']
+            self.hyp_skyblock_zombie_slayer_tier5_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['kills']['5']
+            self.hyp_skyblock_zombie_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['zombie']['xp']
+            # Enderman
+            self.hyp_skyblock_enderman_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['level']['currentLevel']
+            self.hyp_skyblock_enderman_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['level']['progress']
+            self.hyp_skyblock_enderman_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['level']['xpForNext']
+            self.hyp_skyblock_enderman_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['kills']['1']
+            self.hyp_skyblock_enderman_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['kills']['2']
+            self.hyp_skyblock_enderman_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['kills']['3']
+            self.hyp_skyblock_enderman_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['kills']['4']
+            self.hyp_skyblock_enderman_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['enderman']['xp']
+            # Blaze
+            self.hyp_skyblock_blaze_slayer_level = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['level']['currentLevel']
+            self.hyp_skyblock_blaze_slayer_level_progress = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['level']['progress']
+            self.hyp_skyblock_blaze_slayer_level_left = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['level']['xpForNext']
+            self.hyp_skyblock_blaze_slayer_tier1_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['kills']['1']
+            self.hyp_skyblock_blaze_slayer_tier2_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['kills']['2']
+            self.hyp_skyblock_blaze_slayer_tier3_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['kills']['3']
+            self.hyp_skyblock_blaze_slayer_tier4_kills = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['kills']['4']
+            self.hyp_skyblock_blaze_slayer_exp = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['slayers']['blaze']['xp']
             # TODO: Pets
             # TODO: Purse
             # TODO: Current area
 
-            # TODO: Levels
+            # TODO: Fairy souls & Levels
             # Send the result
-            personal_modules.send(uid, f"""Skyblock data:
-
+            personal_modules.send(uid, f"""--- Skyblock data ---
 Profile ID: {profile_id}
 
-Armor:
+
+--- Armor ---
 Helmet: {self.hyp_skyblock_info_armor_head}
 Chestplate: {self.hyp_skyblock_info_armor_chestplate}
 Leggings: {self.hyp_skyblock_info_armor_leggings}
 Boots: {self.hyp_skyblock_info_armor_boots}
-Armor set: {self.hyp_skyblock_info_armor_set}""")
+Armor set: {self.hyp_skyblock_info_armor_set}
+
+
+--- Fairy souls ---
+Collected: {self.hyp_skyblock_info_fairy_souls_collected}
+Total: {self.hyp_skyblock_info_fairy_souls_total}
+
+
+--- Levels ---
+Taming: {self.hyp_skyblock_info_taming_level}
+Farming: {self.hyp_skyblock_info_farming_level}
+Mining: {self.hyp_skyblock_info_mining_level}
+Combat: {self.hyp_skyblock_info_combat_level}
+Foraging: {self.hyp_skyblock_info_foraging_level}
+Fishing: {self.hyp_skyblock_info_fishing_level}
+Enchanting: {self.hyp_skyblock_info_enchanting_level}
+Alchemy: {self.hyp_skyblock_info_alchemy_level}
+Carpentry: {self.hyp_skyblock_info_carpentry_level}
+Runecrafting: {self.hyp_skyblock_info_runecrafting_level}
+Social: {self.hyp_skyblock_info_social_level}
+Average: {self.hyp_skyblock_info_average_level}
+
+
+--- Slayer ---
+Zombie:
+Slayer level: {self.hyp_skyblock_zombie_slayer_level}
+Level progress: {self.hyp_skyblock_zombie_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_zombie_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_zombie_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_zombie_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_zombie_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_zombie_slayer_tier4_kills}
+Tier 5 kills: {self.hyp_skyblock_zombie_slayer_tier5_kills}
+EXP: {self.hyp_skyblock_zombie_slayer_exp}
+
+Spider:
+Slayer level: {self.hyp_skyblock_spider_slayer_level}
+Level progress: {self.hyp_skyblock_spider_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_spider_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_spider_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_spider_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_spider_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_spider_slayer_tier4_kills}
+EXP: {self.hyp_skyblock_spider_slayer_exp}
+
+Wolf:
+Slayer level: {self.hyp_skyblock_wolf_slayer_level}
+Level progress: {self.hyp_skyblock_wolf_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_wolf_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_wolf_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_wolf_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_wolf_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_wolf_slayer_tier4_kills}
+EXP: {self.hyp_skyblock_wolf_slayer_exp}
+
+Enderman:
+Slayer level: {self.hyp_skyblock_enderman_slayer_level}
+Level progress: {self.hyp_skyblock_enderman_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_enderman_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_enderman_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_enderman_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_enderman_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_enderman_slayer_tier4_kills}
+EXP: {self.hyp_skyblock_enderman_slayer_exp}
+
+Blaze:
+Slayer level: {self.hyp_skyblock_blaze_slayer_level}
+Level progress: {self.hyp_skyblock_blaze_slayer_level_progress}
+EXP needed to level up:  {self.hyp_skyblock_blaze_slayer_level_left}
+Tier 1 kills: {self.hyp_skyblock_blaze_slayer_tier1_kills}
+Tier 2 kills: {self.hyp_skyblock_blaze_slayer_tier2_kills}
+Tier 3 kills: {self.hyp_skyblock_blaze_slayer_tier3_kills}
+Tier 4 kills: {self.hyp_skyblock_blaze_slayer_tier4_kills}
+EXP: {self.hyp_skyblock_blaze_slayer_exp}""")
 
     def sexypic(self, user_id: str):
         """Get 5 random sexy pic from Pixiv and then sends it to user_id
@@ -699,7 +926,6 @@ Armor set: {self.hyp_skyblock_info_armor_set}""")
             uid (str): The user's ID you want to send the help message.
         """
         self.send(uid, """--- Keywords ---
-
 help {Get the help message}
 query [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}
 hyp [In game name] {Get your Hypixel basic info}
