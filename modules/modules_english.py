@@ -90,12 +90,19 @@ class Modules:
             # Data
             try:
                 self.hyp_basic_info_displayname = self.hyp_basic_info_result['player']['displayname']
+                self.hyp_basic_info_karma = self.hyp_basic_info_result['player']['karma']
                 self.hyp_basic_info_rank = self.hyp_basic_info_result['player']['newPackageRank']
                 self.hyp_basic_info_most_recent_game = self.hyp_basic_info_result['player']['mostRecentGameType']
+                self.hyp_basic_info_pet = self.hyp_basic_info_result['player']['currentPet']
+                self.hyp_basic_info_gadget = self.hyp_basic_info_result['player']['currentGadget']
+                self.hyp_basic_info_language = self.hyp_basic_info_result['player']['userLanguage']
             except KeyError:
                 self.hyp_basic_info_most_recent_game = 'SKYBLOCK'
+                self.hyp_basic_info_pet = 'NONE'
+                self.hyp_basic_info_gadget = 'NONE'
+                self.hyp_basic_info_language = 'NONE'
 
-            modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
+            modules.send(group_id, uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nKarma: {self.hyp_basic_info_karma}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}\nCurrent pet: {self.hyp_basic_info_pet}\nCurrent gadget: {self.hyp_basic_info_gadget}\nLanguage: {self.hyp_basic_info_language}')
 
         def hyp_bedwars_info(self, group_id: str, user_id: str, username: str):
             """Get's a player's Hypixel bedwars status using their UUID, and then sends the result to group_id while mentioning user_id.
@@ -172,7 +179,7 @@ class Modules:
             try:
                 self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor_set']
             except KeyError:
-                self.hyp_skyblock_info_armor_set = "None"
+                self.hyp_skyblock_info_armor_set = "NONE"
 
             # Fairy souls
             self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['fairy_souls']['collected']
@@ -347,11 +354,11 @@ class PersonalModules:
             self.get_uuid_uuid = self.get_uuid_result['id']  # UUID
 
         def hyp_basic_info(self, uid: str, username: str):
-            """Get username's basic Hypixel information and then sends it to uid.
+            """Get the basic Hypixel information of a player using their UUID, and then sends the results to group_id while mentioning uid.
 
             Args:
-                uid (str): The user's ID you want to send the results to.
-                username (str): The player's name.
+                uid (str): The user's ID you want to mention.
+                username (str): The player's username, which will be the input get get_uuid, which will get the player's UUID to be queried.
             """
             self.get_uuid(username)  # First, get UUID
             self.hyp_basic_info_res = requests.get(f'https://api.hypixel.net/player?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get basic info from Hypixel API
@@ -360,12 +367,20 @@ class PersonalModules:
             # Data
             try:
                 self.hyp_basic_info_displayname = self.hyp_basic_info_result['player']['displayname']
+                self.hyp_basic_info_karma = self.hyp_basic_info_result['player']['karma']
                 self.hyp_basic_info_rank = self.hyp_basic_info_result['player']['newPackageRank']
                 self.hyp_basic_info_most_recent_game = self.hyp_basic_info_result['player']['mostRecentGameType']
+                self.hyp_basic_info_pet = self.hyp_basic_info_result['player']['currentPet']
+                self.hyp_basic_info_gadget = self.hyp_basic_info_result['player']['currentGadget']
+                self.hyp_basic_info_language = self.hyp_basic_info_result['player']['userLanguage']
             except KeyError:
                 self.hyp_basic_info_most_recent_game = 'SKYBLOCK'
+                self.hyp_basic_info_pet = 'NONE'
+                self.hyp_basic_info_gadget = 'NONE'
+                self.hyp_basic_info_language = 'NONE'
 
-            personal_modules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}')
+            personal_modules.send(uid, f'Hypixel basic information:\nDisplay name: {self.hyp_basic_info_displayname}\nKarma: {self.hyp_basic_info_karma}\nRank: {self.hyp_basic_info_rank}\nMost recent game: {self.hyp_basic_info_most_recent_game}\nCurrent pet: {self.hyp_basic_info_pet}\nCurrent gadget: {self.hyp_basic_info_gadget}\nLanguage: {self.hyp_basic_info_language}')
+
 
         def hyp_bedwars_info(self, user_id: str, username: str):
             """Get username's basic Hypixel bedwars status and then sends it to user_id.
@@ -439,7 +454,7 @@ class PersonalModules:
             try:
                 self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][profile_id]['items']['armor_set']
             except KeyError:
-                self.hyp_skyblock_info_armor_set = "None"
+                self.hyp_skyblock_info_armor_set = "NONE"
 
             # Fairy souls
             self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][profile_id]['data']['fairy_souls']['collected']
