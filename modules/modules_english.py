@@ -32,21 +32,6 @@ class Modules:
         """
         requests.get(f"http://127.0.0.1:5700/send_group_msg?group_id={group_id}&message={msg}")  # Do the request to send the message
 
-    def calc(self, group_id: str, user_id: str, equation: str):
-        """Calculates equation using eval(), and then sends the result to group_id while mentioning user_id.
-
-        Args:
-            group_id (str): The group's ID you want to send the result to.
-            user_id (str): The user's ID you want to mention.
-            equation (str): The equation to calculate.
-        """
-        try:
-            self.calc_result = eval(equation)  # Get the result
-        except Exception as e:  # Example: a/0
-            self.send(group_id, user_id, e)
-        # Nothing wrong, send the results and return them
-        self.send(group_id, user_id, self.calc_result)
-
     class Minecraft:
         """Minecraft modules for Superior Bot.
         """
@@ -170,17 +155,21 @@ class Modules:
                     modules.send(group_id, uid, "You don't have an Skyblock profile yet!")
 
                 # Data
+                # Profile cute name
                 self.hyp_skyblock_info_cute_name = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['cute_name']
 
+                # Armor
                 self.hyp_skyblock_info_armor_boots = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][0]['display_name']
                 self.hyp_skyblock_info_armor_leggings = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][1]['display_name']
                 self.hyp_skyblock_info_armor_chestplate = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][2]['display_name']
                 self.hyp_skyblock_info_armor_head = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor'][3]['display_name']
                 self.hyp_skyblock_info_armor_set = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['items']['armor_set']
 
+                # Fairy souls
                 self.hyp_skyblock_info_fairy_souls_collected = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['collected']
                 self.hyp_skyblock_info_fairy_souls_total = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['fairy_souls']['total']
-            
+
+                # Levels
                 self.hyp_skyblock_info_taming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['taming']['level']
                 self.hyp_skyblock_info_farming_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['farming']['level']
                 self.hyp_skyblock_info_mining_level = self.hyp_skyblock_info_result['profiles'][self.hyp_skyblock_info_profile]['data']['levels']['mining']['level']
@@ -203,42 +192,6 @@ class Modules:
                 # TODO: Fairy souls & Levels
                 # Send the result
                 modules.send(group_id, uid, f"Skyblock data:\n\nProfile ID: {self.hyp_skyblock_info_profile}\nProfile cute name: {self.hyp_skyblock_info_cute_name}\n\nArmor:\nHelmet: {self.hyp_skyblock_info_armor_head}\nChestplate: {self.hyp_skyblock_info_armor_chestplate}\nLeggings: {self.hyp_skyblock_info_armor_leggings}\nBoots: {self.hyp_skyblock_info_armor_boots}\nArmor set: {self.hyp_skyblock_info_armor_set}")
-
-    def wotd(self, group_id: str):
-        """Sends Bing's wallpaper to group_id without mentioning people.
-
-        Args:
-            group_id (str): The group's ID you want to send the result to.
-        """
-        self.wotd_res = requests.get(self.wotd_api)  # Get data
-        if self.wotd_res.content:
-            self.wotd_result = self.wotd_res.json()  # Get JSON data
-
-        # Get image details and the image itself
-        self.wotd_copyright = self.wotd_result['images'][0]['copyright']
-        self.wotd_title = self.wotd_result['images'][0]['title']
-        self.wotd_img_url = 'https://cn.bing.com' + self.wotd_result['images'][0]['url']
-
-        self.send_public_message(group_id, f"[CQ:image,file={self.wotd_img_url[:self.wotd_img_url.find('&rf')]}]")  # Send the image
-        self.send_public_message(group_id, f'Title: {self.wotd_title}\nCopyright: {self.wotd_copyright}')  # Send description
-
-    def get_news(self, group_id: str):
-        """Get healine news from API and then sends it to chat without mentioning anyone.
-
-        Args:
-            group_id (str): The group's ID you want to send the result to.
-        """
-        self.get_news_res = requests.get(self.news_api)  # Get data
-        self.get_news_result = self.get_news_res.json()  # Get JSON data
-
-        # Get details
-        self.get_news_news1 = self.get_news_result['T1348647853363'][0]['title']
-        self.get_news_news2 = self.get_news_result['T1348647853363'][1]['title']
-        self.get_news_news3 = self.get_news_result['T1348647853363'][2]['title']
-        self.get_news_news4 = self.get_news_result['T1348647853363'][3]['title']
-        self.get_news_news5 = self.get_news_result['T1348647853363'][4]['title']
-
-        self.send_public_message(group_id, f"1. {self.get_news_news1}\n2. {self.get_news_news2}\n3. {self.get_news_news3}\n4. {self.get_news_news4}\n5. {self.get_news_news5}")  # Send result
 
     class Timed:
         """Timed keywords: Keywords that only works during a specific time.
@@ -322,7 +275,7 @@ class Modules:
         Args:
             group_id (str): The group's ID you want to send the result to.
         """
-        self.send_public_message(group_id, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send_public_message(group_id, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 class PersonalModules:
@@ -342,20 +295,6 @@ class PersonalModules:
             msg (str): The message you want to send.
         """
         requests.get(f"http://127.0.0.1:5700/send_private_msg?user_id={str(user_id)}&message={msg}")  # Do the request to send the message
-
-    def calc(self, user_id: str, equation: str):
-        """Calculate equation using eval() and then sends the result.
-
-        Args:
-            user_id (str): The user's ID you want to send the result to.
-            equation (str): The equation to be calculated.
-        """
-        try:
-            self.calc_result = eval(equation)  # Get the result
-        except Exception as e:  # Example: a/0
-            self.send(user_id, e)
-        else:  # Nothing wrong, send the results
-            self.send(user_id, self.calc_result)
 
     class Minecraft:
         """Minecraft modules for Superior Bot private chat.
@@ -529,42 +468,6 @@ class PersonalModules:
             # Send to the user
             self.send(user_id, f'[CQ:image,file={self.random_sexy_img_url}]\nAuthor: {self.random_sexy_painter}\nPID: {self.random_sexy_pid}\nTitle: {self.random_sexy_title}\nImage URL: {self.random_sexy_img_url}\nFile type: {self.random_sexy_file_type}')  # Send image
 
-    def wotd(self, uid: str):
-        """Get Bing's wallpaper and then sends it to uid.
-
-        Args:
-            uid (str): The user's ID you want to send the wallpaper to.
-        """
-        self.wotd_res = requests.get(self.wotd_api)  # Get data
-        if self.wotd_res.content:
-            self.wotd_result = self.wotd_res.json()  # Get JSON data
-
-        # Get image details and the image itself
-        self.wotd_copyright = self.wotd_result['images'][0]['copyright']
-        self.wotd_title = self.wotd_result['images'][0]['title']
-        self.wotd_img_url = 'https://cn.bing.com' + self.wotd_result['images'][0]['url']
-
-        self.send(uid, f"[CQ:image,file={self.wotd_img_url[:self.wotd_img_url.find('&rf')]}]")  # Send the image
-        self.send(uid, f'Title: {self.wotd_title}\nCopyright: {self.wotd_copyright}')  # Send description
-
-    def get_news(self, uid: str):
-        """Get the headline news and then sends it to uid.
-
-        Args:
-            uid (str): The user's ID you want to send the news to.
-        """
-        self.get_news_res = requests.get(self.news_api)  # Get data
-        self.get_news_result = self.get_news_res.json()  # Get JSON data
-
-        # Get details
-        self.get_news_news1 = self.get_news_result['T1348647853363'][0]['title']
-        self.get_news_news2 = self.get_news_result['T1348647853363'][1]['title']
-        self.get_news_news3 = self.get_news_result['T1348647853363'][2]['title']
-        self.get_news_news4 = self.get_news_result['T1348647853363'][3]['title']
-        self.get_news_news5 = self.get_news_result['T1348647853363'][4]['title']
-
-        self.send(uid, f"1. {self.get_news_news1}\n2. {self.get_news_news2}\n3. {self.get_news_news3}\n4. {self.get_news_news4}\n5. {self.get_news_news5}")  # Send result
-
     class Timed:
         """Timed keywords: Keywords that can only work during a specific time.
         """
@@ -645,7 +548,7 @@ class PersonalModules:
         Args:
             uid (str): The user's ID you want to send the help message.
         """
-        self.send(uid, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\ncalc [Equation] {Calculate something}\n\nwotd {Get wallpaper of the day from Bing}\n\nsexypic {Get 5 sexy pics from Pixiv. USE BY CAUTION}\n\nnews {Get the headline news}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
+        self.send(uid, "--- Keywords ---\n\nhelp {Get the help message}\n\nquery [Server address] {Used to check the basic information about a Minecraft server. No response means that the server is offline}\n\nhyp [In game name] {Get your Hypixel basic info}\n\nbw [In game name] {Get your Hypixel bedwars info}\n\nsb [In game name] {Get your Hypixel Skyblock basic info}\n\nsexypic {Get 5 sexy pics from Pixiv. USE BY CAUTION}\n\n\n\n--- Economy ---\n\n^balance/^bal {How much cash do you have}\n\n^work {Work for cash.. or lose them}\n\n\n\n--- Timed keywords ---\n\nTechnoblade/Techno:\nAvailable: Jul 1")
 
 
 # Initialize modules
