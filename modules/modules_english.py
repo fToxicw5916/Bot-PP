@@ -47,6 +47,7 @@ class Modules:
                 user_id (str): The user's ID you want to mention.
                 host (str): The Minecraft server's IP/URL.
             """
+            modules.send(group_id, user_id, "Received, processing...")
             try:
                 self.mc_query_res = requests.get(f"http://127.0.0.1/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
             except Exception:  # The query server is offline
@@ -83,6 +84,7 @@ class Modules:
                 uid (str): The user's ID you want to mention.
                 username (str): The player's username, which will be the input get get_uuid, which will get the player's UUID to be queried.
             """
+            modules.send(group_id, uid, "Received, processing...")
             self.get_uuid(username)  # First, get UUID
             self.hyp_basic_info_res = requests.get(f'https://api.hypixel.net/player?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get basic info from Hypixel API
             self.hyp_basic_info_result = self.hyp_basic_info_res.json()  # Get JSON data from the response
@@ -112,6 +114,7 @@ class Modules:
                 user_id (str): The user's ID you want to mention.
                 username (str): The player's username, which will be feed into get_uuid to get the player's UUID.
             """
+            modules.send(group_id, user_id, "Received, processing...")
             self.get_uuid(username)  # Get the player's UUID first
             self.hyp_bedwars_info_res = requests.get(f'https://api.hypixel.net/player?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get info from API
             self.hyp_bedwars_info_result = self.hyp_bedwars_info_res.json()  # Get JSON data
@@ -147,6 +150,7 @@ class Modules:
                 uid (str): The user's ID you want to mention.
                 username (str): The player's username, which will be feed into get_uuid().
             """
+            modules.send(group_id, uid, "Received, processing...")
             self.get_uuid(username)  # Get UUID
             self.hyp_skyblock_list_res = requests.get(f"https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}")
             self.hyp_skyblock_list_result = self.hyp_skyblock_list_res.json()
@@ -165,6 +169,7 @@ class Modules:
                 username (str): The player's username, which will be feed into get_uuid to get the player's UUID.
                 profile_id (str): The player's profile ID.
             """
+            modules.send(group_id, uid, "Received, processing...")
             profile_id = profile_id.strip("\"")
             # Get the player's skyblock info
             self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")  # Get data
@@ -326,6 +331,7 @@ class PersonalModules:
                 user_id (str): The user's ID you want to send the results to.
                 host (str): The IP of the Minecraft server to be queried.
             """
+            personal_modules.send(user_id, "Received, processing...")
             try:
                 self.mc_query_res = requests.get(f"http://127.0.0.1/json.php?host={host}&port=25565")  # Request to a PHP file with Apache to get the server's status
             except Exception:  # The query server is offline
@@ -360,6 +366,7 @@ class PersonalModules:
                 uid (str): The user's ID you want to mention.
                 username (str): The player's username, which will be the input get get_uuid, which will get the player's UUID to be queried.
             """
+            personal_modules.send(uid, "Received, processing...")
             self.get_uuid(username)  # First, get UUID
             self.hyp_basic_info_res = requests.get(f'https://api.hypixel.net/player?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get basic info from Hypixel API
             self.hyp_basic_info_result = self.hyp_basic_info_res.json()  # Get JSON data from the response
@@ -389,6 +396,7 @@ class PersonalModules:
                 user_id (str): The user's ID you want to send the results to.
                 username (str): The player's name.
             """
+            personal_modules.send(user_id, "Received, processing...")
             self.get_uuid(username)
             self.hyp_bedwars_info_res = requests.get('https://api.hypixel.net/player?' + f'key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}')  # Get info from API
             self.hyp_bedwars_info_result = self.hyp_bedwars_info_res.json()  # Get JSON data
@@ -423,6 +431,7 @@ class PersonalModules:
                 uid (str): The user's ID you want to mention.
                 username (str): The player's username, which will be feed into get_uuid().
             """
+            personal_modules.send(uid, "Received, processing...")
             self.get_uuid(username)
             self.hyp_skyblock_list_res = requests.get(f"https://api.hypixel.net/skyblock/profiles?key={self.hypixel_api_key}&uuid={self.get_uuid_uuid}")
             self.hyp_skyblock_list_result = self.hyp_skyblock_list_res.json()
@@ -440,6 +449,7 @@ class PersonalModules:
                 username (str): The player's username, which will be feed into get_uuid to get the player's UUID.
                 profile_id (str): The player's profile ID.
             """
+            personal_modules.send(uid, "Received, processing...")
             profile_id = profile_id.strip("\"")
             # Get the player's skyblock info
             self.hyp_skyblock_info_res = requests.get(f"https://sky.shiiyu.moe/api/v2/profile/{username}")
@@ -490,6 +500,7 @@ class PersonalModules:
         Args:
             user_id (str): The user's ID you want to send the results to.
         """
+        personal_modules.send(user_id, "Received, processing...")
         self.random_sexy_res = requests.get(self.random_sexy_api)  # Get raw data from API
         self.random_sexy_result = self.random_sexy_res.json()  # Convert raw data into JSON data
 
